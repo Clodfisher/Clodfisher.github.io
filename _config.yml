@@ -3,9 +3,9 @@ title: Hunter Yuan
 subtitle: 一亩三分地
 description: 欢迎来到我的个人站~
 # 头像里面的标题
-avatarTitle: leopardpan
+avatarTitle: Hunter
 # 头像里面的描述
-avatarDesc: iOS / 机器学习
+avatarDesc: C / 网络安全 / 虚拟化
 url: "https://clodfisher.github.io"
 
 # Comment
@@ -15,6 +15,7 @@ comment:
 
 # Social
 social:
+    csdn: tao546377318
     weibo: 5366874726 
     github: leopardpan
     # twitter: 
