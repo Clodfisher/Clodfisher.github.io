@@ -39,7 +39,11 @@ VMWare WorkStation11安装后，会安装此服务，该服务可以为VMnet的�
 
 桥接就是将物理机真实网卡与虚拟机虚拟网卡（这时候与物理机的虚拟网卡适配器没有关系）利用网桥进行通信。    
 ![](/images/posts/2018-2-6-VMWareNetworkConf/VMWareNetworkConf7.jpg)     
-如上所示，将物理机真实网卡的出端口作为VMnet0虚拟交换的端口使用（交换的端口是没有IP和mac），而将物理机真实网卡IP地址设置为VMnet0交换机上的一个逻辑网卡。所以VM1访问C1是同个10.7.10.30访问的，而不是通过真实的网卡10.7.10.50。    
+如上所示，将物理机真实网卡的出端口作为VMnet0虚拟交换的端口使用（交换的端口是没有IP和mac），而将物理机真实网卡IP地址设置为VMnet0交换机上的一个逻辑网卡。所以VM1访问C1是同个10.7.10.30访问的，而不是通过真实的网卡10.7.10.50。   
+
+#### VMare Bridge Protocol    
+虚拟桥接协议，物理网卡只有绑定了这个协议才能够让物理网卡连接到虚拟交换机VMnet。    
+![](/images/posts/2018-2-6-VMWareNetworkConf/VMWareNetworkConf11.jpg)    
 
 <br>    
 ### 三种工作模式    
