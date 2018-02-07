@@ -1,7 +1,7 @@
 ---
 layout: post
 title: VMWare虚拟机网络配置
-date: 2018-2-2 
+date: 2018-2-6 
 tags: 虚拟化    
 ---
 <br>    
@@ -61,7 +61,7 @@ VMWare WorkStation11安装后，会安装此服务，该服务可以为VMnet的�
 [VMWare虚拟机网络配置](http://jwcqc.me/2016/08/18/vmware-network-configuration/)        
 [Linux 上的基础网络设备详解](https://www.ibm.com/developerworks/cn/linux/1310_xiawc_networkdevice/index.html)        
 
-转载请注明：[HunterYuan的博客](https://clodfisher.github.io/) » [VMWare虚拟机网络配置](https://clodfisher.github.io/2018/02/VMWareNetworkConf/)   
+转载请注明：[HunterYuan的博客](https://clodfisher.github.io/) » [VMWare虚拟机网络配置](https://clodfisher.github.io/2018/06/VMWareNetworkConf/)   
 
 
 
