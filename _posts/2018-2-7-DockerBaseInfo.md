@@ -2,7 +2,7 @@
 layout: post
 title: Docker之基本概念
 date: 2018-2-7 
-tags: 虚拟化    
+tags: Docker        
 ---
 <br>    
 ### 简介    
