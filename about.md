@@ -26,8 +26,8 @@ title: 关于我
 *联系方式：*    
 **QQ**：643093596    
 **outlook**：hunter_yuan@outlook.com    
-**gethib**：[github地址](https://github.com/clodfisher)    
-**CSDN**:[CSDN](http://blog.csdn.net/tao546377318)      
+**gethib**：[传送门](https://github.com/clodfisher)    
+**博客**:[CSDN](http://blog.csdn.net/tao546377318)      
 
 **友情链接**：    
 [王哈哈](http://am4zing.me/)          
