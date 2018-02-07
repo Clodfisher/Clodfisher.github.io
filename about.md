@@ -1,4 +1,4 @@
----
+﻿---
 layout: page
 title: 关于我 
 ---
@@ -30,5 +30,6 @@ title: 关于我
 **CSDN**:[CSDN](http://blog.csdn.net/tao546377318)      
 
 **友情链接**：    
-[王哈哈](http://am4zing.me/)     
+[王哈哈](http://am4zing.me/)
+[Voyage](http://haoxiaohui.xyz/)     
 
