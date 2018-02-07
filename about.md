@@ -30,6 +30,6 @@ title: 关于我
 **CSDN**:[CSDN](http://blog.csdn.net/tao546377318)      
 
 **友情链接**：    
-[王哈哈](http://am4zing.me/)</br>      
+[王哈哈](http://am4zing.me/)          
 [小白](http://haoxiaohui.xyz/)     
 
