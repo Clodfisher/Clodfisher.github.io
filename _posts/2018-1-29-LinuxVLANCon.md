@@ -45,8 +45,10 @@ tags: 虚拟化
   此命令可以添加到开启启动时执行的脚本里面    
   ![](/images/posts/2018-1-29-LinuxVlanConf/LinuxVlanConf14.jpg)    
 
+<br>
   参考链接：    
   [Virtual Local Area Networks](https://wiki.ubuntu.com/vlan)        
   [Linux 上的基础网络设备详解](https://www.ibm.com/developerworks/cn/linux/1310_xiawc_networkdevice/index.html)        
-  
+
+<br>  
   转载请注明：[HunterYuan的博客](https://clodfisher.github.io/) » [Linux配置VLAN总结](https://clodfisher.github.io/2018/01/LinuxVLANCon/)   

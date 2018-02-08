@@ -70,4 +70,5 @@ ID-list1[1]= 31094608
 ```
 **以上只是对这种现象的一种假想，没能进行源码的验证，若有错误，希望给予指正。**
 
+<br>
 转载请注明：[HunterYuan的博客](https://clodfisher.github.io/) » [Python列表的可变性讨论](https://clodfisher.github.io/2018/02/PythonListChange/)   

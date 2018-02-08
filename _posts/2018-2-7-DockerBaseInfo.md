@@ -45,10 +45,12 @@ Docker 仓库的概念跟Git 类似，注册服务器可以理解为 GitHub 这�
 **三者关系**交互图如下所示：    
 ![](/images/posts/2018-2-6-DockerBaseInfo/DockerBaseInfo2.jpg)     
 
+<br>
 参考链接：    
 [Docker-从入门到实践](https://yeasy.gitbooks.io/docker_practice/)        
 [酷 壳–COOLSHELL](https://coolshell.cn/?s=DOCKER)        
 
+<br>
 转载请注明：[HunterYuan的博客](https://clodfisher.github.io/) » [VMWare虚拟机网络配置](https://clodfisher.github.io/2018/07/DockerBaseInfo/)   
 
 

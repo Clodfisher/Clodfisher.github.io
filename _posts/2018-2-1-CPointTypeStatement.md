@@ -163,4 +163,5 @@ $ ./a.out
 ### 问题结论
 用的是指针类型无妨，若是实体类型将会报错，究竟为什么怎样，是由于编译器决定的，本身不管是什么指针类型的字节数都是一样的         
 
+<br>
 转载请注明：[HunterYuan的博客](https://clodfisher.github.io/) » [C中使用的类型是否必须声明](https://clodfisher.github.io/2018/02/CPointTypeStatement/)   
