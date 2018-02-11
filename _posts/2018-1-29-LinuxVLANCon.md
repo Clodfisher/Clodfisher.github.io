@@ -41,9 +41,9 @@ tags: 虚拟化
   ![](/images/posts/2018-1-29-LinuxVlanConf/LinuxVlanConf13.jpg)  
   ![](/images/posts/2018-1-29-LinuxVlanConf/LinuxVlanConf14.jpg)  
 
-  四：通过命令行方式，配置linux虚拟机的vlan：    
-  此命令可以添加到开启启动时执行的脚本里面    
-  ![](/images/posts/2018-1-29-LinuxVlanConf/LinuxVlanConf14.jpg)    
+  四：通过命令行方式，配置linux虚拟机的vlan：      
+  ![](/images/posts/2018-1-29-LinuxVlanConf/LinuxVlanConf15.jpg)  
+  此命令可以添加到开启启动时执行的脚本里面        
 
 <br>
   参考链接：    
