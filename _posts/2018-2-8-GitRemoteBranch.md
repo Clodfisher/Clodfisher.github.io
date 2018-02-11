@@ -28,5 +28,5 @@ tags: Git
 [Git 获取远程分支](http://www.cnblogs.com/hanxianlong)             
 
 <br>
-转载请注明：[HunterYuan的博客](https://clodfisher.github.io/) » [Git 获取远程分支](https://clodfisher.github.io/2018/08/GitRemoteBranch/)   
+转载请注明：[HunterYuan的博客](https://clodfisher.github.io/) » [Git 获取远程分支](https://clodfisher.github.io/2018/02/GitRemoteBranch/)   
 
