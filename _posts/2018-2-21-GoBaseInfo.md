@@ -87,7 +87,21 @@ go get -u -v github.com/spf13/cobra/cobra
 <br>
 ### 命令源码文件与库源码文件区别    
 **命令源码文件**，就是声明属于main代码包并且包含无参数声明和结果声明的main函数的源码文件。这类源码文件是程序的入口，它们可以独立运行（使用go run命令），也可以通过go build或go install命令的到相应的可执行文件。    
-**库源码文件**，则是指存在于某个代码包中的普通源码文件。     
+**库源码文件**，则是指存在于某个代码包中的普通源码文件。 
+
+<br>
+### go install之后目录关系    
+在某个包目录下执行`go install`会将此目录代码包编译归档存放到指定目录。存放归档文件目录的相对路径与被安装的代码包的上一级代码包的相对路径一致。第一个相对路径是相对于工作区pkg目录下的平台相关目录而言的，而第二个相对路径是相对于工作区的src目录而言的。如果被安装的代码包没有上一级代码包(也就是说，它的父目录就是工作区src目录)，那么他的归档文件就会被直接存放到当前工作区pkg目录的平台相关目录下。例如`$GOPATH/src/gopcp.v2/helper/log`包的归档文件log.a一定会被存放到`$GOPATH/pkp/windows_amd64/gopcp.v2/helper`这个目录下。而它的子代码包`$GOPATH/src/gopcp.v2/helper/log/base`的归档文件base.a，则一定会被存放到`$GOPATH/pkp/windows_amd64/gopcp.v2/helper/log`目录下。    
+
+具体操作如下所示：    
+```
+yht@DESKTOP-LP74MKU MINGW64 /d/yht/Go/example.v2/src/gopcp.v2/helper/log (master)    
+$ go install    
+```
+在此目录下执行`go install`命令，之后会在pkg目录下创建归档包文件    
+![](/images/posts/2018-2-21-GoBaseInfo/2018-2-21-GoBaseInfo2.jpg)     
+
+
 
 <br>
 参考链接：    
