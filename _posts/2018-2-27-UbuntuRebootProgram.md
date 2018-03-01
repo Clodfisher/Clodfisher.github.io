@@ -59,6 +59,7 @@ fi
             echo "Start ICMS"
 
             sh $ICMS_DIR/run_snort.sh
+			sleep 50
             sh $ICMS_DIR/run_barnyard2.sh
             echo "done."
             ;;
