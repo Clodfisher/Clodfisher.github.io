@@ -90,6 +90,12 @@ sudo docker run -d -p 80:80 httpd
 
 通过浏览器验证容器是否正常工作。在浏览器中输入 http://[your ubuntu host IP]   
 ![](/images/posts/2018-3-1-UbuntuInstallDocker/UbuntuInstallDocker3.jpg)    
+其执行流程如下所示：
+> 1.Docker 客户端执行 docker run 命令。    
+> 2.Docker daemon 发现本地没有 httpd 镜像。    
+> 3.daemon 从 Docker Hub 下载镜像。    
+> 4.下载完成，镜像 httpd 被保存到本地。    
+> 5.Docker daemon 启动容器。    
 
 <br>
 ### 镜像下载加速    
