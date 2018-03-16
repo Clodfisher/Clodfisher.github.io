@@ -169,3 +169,6 @@ docker run -it --device-write-bps /dev/sda:30MB ubuntu ： 限制容器写 /dev/
 
 <br>
 ### 日志管理配置    
+
+<br> 
+转载请注明：[HunterYuan的博客](https://clodfisher.github.io/) » [Docker命令小结](https://clodfisher.github.io/2018/03/DockerCommand/)   
