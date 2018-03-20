@@ -77,6 +77,7 @@ tags: Docker
 **`rm`**    
 * docker rm 镜像标识 【镜像标识】： 删除一个或多个容器。   
 * docker rm -v $(docker ps -aq -f status=exited) ： 批量删除所有已经退出的容器。    
+* docker rm -v : ocker rm 删除容器时可以带上 -v 参数，docker 会将容器使用到的 volume 一并删除，但前提是没有其他容器 mount 该 volume，目的是保护数据，非常合理。果删除容器时没有带 -v 呢？这样就会产生孤儿 volume，好在 docker 提供了 volume rm 子命令可以对 docker managed volume 进行维护。    
 
 **`search`**    
 * docker search 镜像名字 ： 在命令行中就可以搜索 Docker Hub 中的镜像。    
@@ -157,9 +158,34 @@ iops 是 io per second，每秒 IO 的次数。
 --device-read-iops，限制读某个设备的 iops。
 --device-write-iops，限制写某个设备的 iops。
 docker run -it --device-write-bps /dev/sda:30MB ubuntu ： 限制容器写 /dev/sda 的速率为 30 MB/s。    
+ 
+**`info`**   
+* docker info : 查看系统默认的driver。
+
+**`-v`**   
+* docker run -d -v <host path>:<container path>:<权限> httpd : 将某一个host文件mount到容器中，容器中已存在的目录文件(container path)数据将会被隐藏，取而代之的是host path目录下的数据。<权限>用于指定容器对于挂在数据的读写权限，默认权限是可读可写。    
+* docker run -d -v <host path/file>:<container path/file>:<权限> httpd : 除了 bind mount 目录，还可以单独指定一个文件。使用 bind mount 单个文件的场景是：只需要向容器添加文件，不希望覆盖整个目录，同时也保留了容器原有的数据。        
+* docker run -d -v <host path/file> httpd :  创建docker managed volume，无控制，均为读写权限。创建过程：容器启动时，简单的告诉 docker "我需要一个 volume 存放数据，帮我 mount 到目录 /abc"。docker 在 /var/lib/docker/volumes 中生成一个随机目录作为 mount 源。如果 /abc 已经存在，则将数据复制到 mount 源。将 volume mount 到 /abc。    
+
+**`cp`**    
+* docker cp hostfile 容器短ID:容器目录的全路径 ： 可以在容器和 host 之间拷贝数据。    
+
+**`--volumes-from`**    
+* docker run --name web1 -d -p 80 --volumes-from vc_data httpd : 其他容器可以通过 --volumes-from 使用 vc_data 这个 volume container。    
+
+**`volume ls`**    
+* docker volume ls : 查看使用的 docker managed volume 。    
+
+**`volume rm`**    
+* docker volume rm [docker managed volumeID] : 删除容器中的docker managed volume。    
+
+**`volume prune`**    
+* docker volume prune : 用这个命令删除孤儿 volume。    
+
+ 
 
 ----
-该总结到38... 
+该总结到44... 
 
 <br>
 ### 数据管理配置        
