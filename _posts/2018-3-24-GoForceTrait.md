@@ -62,19 +62,24 @@ func main() {
 
 结果        
 ```
-[ `go run main.go` | done: 724.1389ms ]
+[ `go run main.go` | done: 901.4775ms ]
+	aArray addr = 0xc0420100f0, value = [1 2 3 4 5 6 7 8 9]
+	aSliceAll addr = 0xc0420100f0, value = [1 2 3 4 5 6 7 8 9]
+	aSlice addr = 0xc0420100f8, value = [2 3 4 5 6 7 8 9]
+	aSliceQuote1 = 0xc0420100f0, &aSliceQuote1=0xc0420023e0
+	aSliceQuote2 = 0xc0420100f0, &aSliceQuote2=0xc042002400
 	---------验证slice的赋值等于为引用----------------
-	slice old = [1 2 3 4 5 6 7], addr=0xc042002400
+	slice old = [1 2 3 4 5 6 7], addr=0xc0420081c0
 	copy change old string ...
-	slice old = [0 2 3 4 5 6 7], addr=0xc042002400
-	slice new = [0 2 3 4 5 6 7], addr=0xc042002440
+	slice old = [0 2 3 4 5 6 7], addr=0xc0420081c0
+	slice new = [0 2 3 4 5 6 7], addr=0xc0420081c0
 	----------验证string进行slice强转后，赋值等于不是引用---------------
 	string old = ClodFisher, string old addr = 0xc0420361c0
-	string old slice = [67 108 111 100 70 105 115 104 101 114], string slice old addr = 0xc0420024a0
+	string old slice = [67 108 111 100 70 105 115 104 101 114], string slice old addr = 0xc04200a240
 	copy change slice ...
 	string old = ClodFisher, string old addr = 0xc0420361c0
 	string new = SlodFisher, string new addr = 0xc0420361e0
-	string new slice = [83 108 111 100 70 105 115 104 101 114], sting slice new addr = 0xc0420024a0
+	string new slice = [83 108 111 100 70 105 115 104 101 114], sting slice new addr = 0xc04200a240
 ```
 
 <br>
