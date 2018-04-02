@@ -112,6 +112,10 @@ tags: Docker
 **`unpause`**    
 * docker unpause 容器标识 : 处于暂停状态的容器不会占用 CPU 资源，直到通过 docker unpause 恢复运行。    
 
+**`docker-machine`**    
+* docker-machine ls : 查看一下当前的 machine。    
+* 
+
 <br>
 ### 网络配置     
 **`network ls`**    
