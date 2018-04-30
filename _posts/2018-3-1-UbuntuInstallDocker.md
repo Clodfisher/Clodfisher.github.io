@@ -73,6 +73,11 @@ sudo docker run hello-world
 ```
 输入如下：   
 ![](/images/posts/2018-3-1-UbuntuInstallDocker/UbuntuInstallDocker1.jpg)     
+其具体含义如下所示：   
+1. 用docker version可以查看docker由客户端和服务器组成，其客户端为命令行，服务器后端，这一句的内容为docker的客户端去连接docker的服务器，下发命令。    
+2. docker的服务器进行“hello world”镜像的拉去，从docker的仓库。    
+3. docker的服务器通过镜像创建了一个容器，这个容器跑了一个能够输入你看到的那句话的程序。    
+4. docker服务器将输出内容传输到docker客户端，最终输出到终端。   
 
 <br>
 ### 安装镜像版Apache HTTP Server    
