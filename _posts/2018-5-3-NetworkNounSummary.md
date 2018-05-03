@@ -30,7 +30,7 @@ tags: 知识汇总
 
 **HDLC** :  高级数据链路控制（High-Level Data Link Control或简称HDLC），是一个在同步网上传输 数据、面向比特的数据链路层协议，它是由国际标准化组织（ISO）根据IBM公司的SDLC（Synchronous Data Link Control）协议扩展开发而成的。   
 
-** HSTS** : HSTS的全英文名称为HTTP Strict Transport Security,中文译为HTTP严格传输安全，其是让浏览器强制使用HTTPS访问网站的一项安全策略，设计的初衷是缓解中间人攻击带来的风险。    
+**HSTS** : HSTS的全英文名称为HTTP Strict Transport Security,中文译为HTTP严格传输安全，其是让浏览器强制使用HTTPS访问网站的一项安全策略，设计的初衷是缓解中间人攻击带来的风险。    
 
 <br>
 ### N     
