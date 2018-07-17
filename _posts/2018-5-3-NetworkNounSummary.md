@@ -8,7 +8,9 @@ tags: 知识汇总
 <br>
 ### A    
 
-**AH** : (Authentication Header, 验证头)主要用于IPSec中对数据添加验证头使用。    
+**AH** : (Authentication Header, 验证头)主要用于IPSec中对数据添加验证头使用。   
+
+**ACL** : （Access Control List，访问控制列表）基于ACL的包过滤防火墙是将制定出的不同区域间访问控制策略部署在路由器端口处过滤进出数据包，达到对访问进行控制，维护网络安全的目的。      
 
 <br>
 ### C    
@@ -41,6 +43,12 @@ tags: 知识汇总
 ### P     
 
 **PDU** : 协议数据单元PDU（Protocol Data Unit）是指对等层次之间传递的数据单位。 协议数据单元(Protocol Data Unit )物理层的 PDU是数据位（bit），数据链路层的 PDU是数据帧（frame），网络层的PDU是数据包（packet），传输层的 PDU是数据段（segment），其他更高层次的PDU是报文（message）。   
+
+<br>
+### Q    
+
+**QUIC**     
+QUIC是快速UDP网络连接（英语：Quick UDP Internet Connections）的缩写，这是一种实验性的传输层网络传输协议，由Google公司开发，在2013年实现。QUIC使用UDP协议，它在两个端点间创建连接，且支持多路复用连接。在设计之初，QUIC希望能够提供等同于SSL/TLS层级的网络安全保护，减少数据传输及创建连接时的延迟时间，双向控制带宽，以避免网络拥塞。Google希望使用这个协议来取代TCP协议，使网页传输速度加快，计划将QUIC提交至互联网工程任务小组（IETF），让它成为下一代的正式网络规范。主要自己实现以下机制：自定义连接机制、自定义重传机制、无阻塞的多路复用、自定义流量控制、等。    
 
 <br>
 ### S    
