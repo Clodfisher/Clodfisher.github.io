@@ -13,7 +13,7 @@ tags: C++ 读书提炼
 * 提炼出整本书的知识点。    
 
 ### 为什么，目标         
-由于工作中对于C++只知道怎么用，对于C++底层的实现，比如虚函数表，成员变量，成员函数，继承和多态等如何在内存中布局，以及之间有和联系等，不太了解，只是知道有这回事。根据大家的推进，这本书讲解的不错，因此拿来啃，以及进行知识的梳理和总结，提炼出设计思想，同时对工作中用到C++知识点的地方进行反思。希望通过这本书的研读，自己对于C++底层实现有个很好的认识；当长时间不用C++的时候，可通过底层原理推出如何使用C++语言，不用再进行C++方法浏览学习；同时对于里面所涉及到设计思想进行提炼和总结。    
+由于工作中对于C++只知道怎么用，对于C++底层的实现，比如虚函数表，成员变量，成员函数，继承和多态等如何在内存中布局，以及之间有和联系等，不太了解，只是知道有这回事。根据大家的推荐，这本书讲解的不错，因此拿来啃，以及进行知识的梳理和总结，提炼出设计思想，同时对工作中用到C++知识点的地方进行反思。希望通过这本书的研读，自己对于C++底层实现有个很好的认识；当长时间不用C++的时候，可通过底层原理推出如何使用C++语言，不用再进行C++语法浏览学习；同时对于里面所涉及到设计思想进行提炼和总结。    
 
 ### 每章概述和感悟    
 
@@ -27,8 +27,8 @@ tags: C++ 读书提炼
 * class层级封装（class hierarchy）-面向对象模型    
   有一些彼此相关的类型，通过一个抽象的base class封装起来，用以提供共同接口用于继承。例如点坐标类。   
 
-  **C++对象模型是怎样**：
-  在C++对象中，有两种class data members:static和nostatic，以及三种class member functions:static、nostatic和virtual。在该模型中，Nostatic data members被配置于每一个class object之内，static data members则被存放于个别的class object之外。static和nostatic function members也被放在个别的class object之外。Virtual function则有以下两个步骤支持：    
+**C++对象模型是怎样**：
+在C++对象中，有两种class data members:static和nostatic，以及三种class member functions:static、nostatic和virtual。在该模型中，Nostatic data members被配置于每一个class object之内，static data members则被存放于个别的class object之外。static和nostatic function members也被放在个别的class object之外。Virtual function则有以下两个步骤支持：    
 1. 每个class产生一堆指向virtual functions的指针，放在表格之中，这个表格成为virtual table(vtbl)。   
 2. 每个class object被按插一个指针，指向相关的virtual table。通常这个指针被成为vptr。vptr的设定和重置都由每一个class的构造、析构和拷贝赋值运算符自动完成。        
   以下以class Point为了进行说明：    
