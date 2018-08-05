@@ -19,14 +19,107 @@ tags: C++ 读书提炼
 
 #### **关于对象**    
   
-  在C++代码中对于对象的描述大致分为三种：    
-* 程序性（procedural）    
+  **在C++代码中对于对象的描述大致分为三种**：    
+* 程序性（procedural）-程序模型        
   “数据”和“处理函数的操作”是分开来声明的，例如C语言的struct。  
-* 抽象数据类型（abstract data type,ADT）   
+* 抽象数据类型（abstract data type,ADT）-抽象数据类型模型       
   以函数重载的尝试实现某个类型数据对象的方法，例如operator引导的函数。    
-* class层级封装（class hierarchy）    
-  用class实现一个类型数据对象，同时可以用继承的方式进行扩展。例如点坐标类。    
+* class层级封装（class hierarchy）-面向对象模型    
+  有一些彼此相关的类型，通过一个抽象的base class封装起来，用以提供共同接口用于继承。例如点坐标类。   
 
+  **C++对象模型是怎样**：
+  在C++对象中，有两种class data members:static和nostatic，以及三种class member functions:static、nostatic和virtual。在该模型中，Nostatic data members被配置于每一个class object之内，static data members则被存放于个别的class object之外。static和nostatic function members也被放在个别的class object之外。Virtual function则有以下两个步骤支持：    
+1. 每个class产生一堆指向virtual functions的指针，放在表格之中，这个表格成为virtual table(vtbl)。   
+2. 每个class object被按插一个指针，指向相关的virtual table。通常这个指针被成为vptr。vptr的设定和重置都由每一个class的构造、析构和拷贝赋值运算符自动完成。        
+  以下以class Point为了进行说明：    
+* 代码如下：        
+```
+class Point {    
+public:    
+  Point(float xval);       
+  virtual ~Point();    
+ 
+  float x() const;    
+  static int PointCount();    
+
+protected:    
+  virtual ostream& print(ostream &os) const;    
+
+  float _x;    
+  static int _point_count;    
+};  
+```    
+
+* 其对象模型如下所示：    
+![](/images/posts/2018-8-5-InsideTheC++ObjectModel/InsideTheC++ObjectModel0.jpg)   
+该模型的主要优点在于它的空间和存取时间的效率；主要缺点则是，如果应用程序代码本身未曾改变，但所用到的class objects 的nostatic data members有所修改，那么这些应用程序代码同样得重新编译。    
+
+**多态**    
+**多态的作用**：多态的主要用途是经由一个共同的接口来影响类型的封装，这个接口通常被定义在一个抽象的base class中。这个共享接口是以virtual function机制引发的，它可以在执行期根据object的真正类型解析出到底是哪一个函数实例被调用。      
+
+**类对象内存表示**     
+需要多少内存才能表现一个class object?    
+* 其nonstatic data members的总和大小。    
+* 加上任何由于对齐的需求而填补上去的空间，可能存在于members之间，也可能存在于集合体边界。    
+* 加上为了支持virtual而由内部产生的任何额外负担。     
+以下以class基类源码为例进行说明：     
+* 代码如下：    
+```
+class ZooAnimal {    
+public:    
+  ZooAnimal();    
+  virtual ~ZooAnimal();    
+  
+  //创建一个虚函数
+  vitrual void rotate();    
+
+protected:    
+  int loc;    
+  string name;    
+};    
+
+ZooAnimal za("Zoey");    
+ZooAnimal *pza = &za;        
+```   
+
+* 对象和指针布局如下所示：       
+![](/images/posts/2018-8-5-InsideTheC++ObjectModel/InsideTheC++ObjectModel1.jpg)     
+
+以下以class继承类源码为例进行说明：     
+* 代码如下：     
+```
+class Bear : public ZooAnimal{   
+public:   
+  Bear();    
+  ~Bear();    
+
+  //实现子类的虚函数，同时自己创建一个虚函数    
+  void rotate();    
+  virtual void dance();    
+
+  //创建自己的成员变量    
+  enum Dances {...}    
+  Dances dances_known;    
+  int cell_block;    
+};    
+
+Bear b("Yogi");    
+Bear *pb= &b;    
+Bear &rb = *pb;    
+``` 
+
+* 可能的内存布局如下所示：    
+![](/images/posts/2018-8-5-InsideTheC++ObjectModel/InsideTheC++ObjectModel2.jpg)       
+
+* 常见问题思索：    
+1. 说出如下代码中一个Bear指针和一个ZooAnimal指针有什么不同？    
+```
+Bear b;    
+ZooAnimal *pz = &b;    
+Bear *pb = &b;    
+```    
+
+答：它们都指向Bear object的第一个byte。其间的差别是，pb所涵盖的地址包含整个Bear object,而pz所涵盖的地址只包含Bear object中的ZooAnimal subobject。除了ZooAnimal subobject中出现的members，你不能使用pz来直接处理Bear的任何members(成员变量、成员函数、未覆盖基类的虚函数)。唯一例外是通过virtual机制。
 
 
 
