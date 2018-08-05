@@ -1,8 +1,8 @@
 ---
-layout: post
-title: 深度探索C++对象模型
-date: 2018-8-5 
-tags: C++ 读书提炼        
+layout: post    
+title: 深度探索C++对象模型    
+date: 2018-8-5    
+tags: C++ 读书提炼           
 ---
 
 ### 前言    
