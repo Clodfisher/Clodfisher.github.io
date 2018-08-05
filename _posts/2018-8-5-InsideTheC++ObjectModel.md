@@ -33,6 +33,7 @@ tags: C++ 读书提炼
 2. 每个class object被按插一个指针，指向相关的virtual table。通常这个指针被成为vptr。vptr的设定和重置都由每一个class的构造、析构和拷贝赋值运算符自动完成。        
   以下以class Point为了进行说明：    
 * 代码如下：        
+
 ```
 class Point {    
 public:    
@@ -63,7 +64,8 @@ protected:
 * 加上任何由于对齐的需求而填补上去的空间，可能存在于members之间，也可能存在于集合体边界。    
 * 加上为了支持virtual而由内部产生的任何额外负担。     
 以下以class基类源码为例进行说明：     
-* 代码如下：    
+* 代码如下：
+    
 ```
 class ZooAnimal {    
 public:    
@@ -86,7 +88,8 @@ ZooAnimal *pza = &za;
 ![](/images/posts/2018-8-5-InsideTheC++ObjectModel/InsideTheC++ObjectModel1.jpg)     
 
 以下以class继承类源码为例进行说明：     
-* 代码如下：     
+* 代码如下：  
+   
 ```
 class Bear : public ZooAnimal{   
 public:   
@@ -113,6 +116,7 @@ Bear &rb = *pb;
 
 * 常见问题思索：    
 1. 说出如下代码中一个Bear指针和一个ZooAnimal指针有什么不同？    
+
 ```
 Bear b;    
 ZooAnimal *pz = &b;    
@@ -121,6 +125,18 @@ Bear *pb = &b;
 
 答：它们都指向Bear object的第一个byte。其间的差别是，pb所涵盖的地址包含整个Bear object,而pz所涵盖的地址只包含Bear object中的ZooAnimal subobject。除了ZooAnimal subobject中出现的members，你不能使用pz来直接处理Bear的任何members(成员变量、成员函数、未覆盖基类的虚函数)。唯一例外是通过virtual机制。
 
+2. 说出如下代码中为什么rotate()所调用的是ZooAnimal实例而不是Bear实例？此外如果初始化函数将一个object内容完整拷贝到另一个object去，为什么za的vptr不执行Bear的virtual table？    
+
+```
+Bear b;    
+ZooAnimal za = b;   //这里会引起切割（sliced）    
+
+//调用ZooAnimal::rotate()
+za.rotate();    
+```    
+答：
+第一个问题是，za并不是一个Bear,它是一个ZooAnimal。多态所造成的一个“一个以上的类型”的潜在力量，并不能够实际发挥在“直接存取objects”。多态不支持对于object的直接处理，只支持指针与引用类型。   
+第二个问题是，编译器在初始化及赋值操作之间做了仲裁。编译器必须确保如果某个object含有一个或一个以上的vptrs,那些vptrs的内容不会被 base class object初始化或改变。    
 
 
 <br>
