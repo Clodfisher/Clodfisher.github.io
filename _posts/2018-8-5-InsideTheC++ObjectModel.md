@@ -25,7 +25,7 @@ tags: C++ 读书提炼
 * 抽象数据类型（abstract data type,ADT）-抽象数据类型模型       
   以函数重载的尝试实现某个类型数据对象的方法，例如operator引导的函数。    
 * class层级封装（class hierarchy）-面向对象模型    
-  有一些彼此相关的类型，通过一个抽象的base class封装起来，用以提供共同接口用于继承。例如点坐标类。   
+  有一些彼此相关的类型，通过一个抽象的base class封装起来，用以提供共同接口用于继承。例如点坐标类。      
 
 **C++对象模型是怎样**：
 在C++对象中，有两种class data members:static和nostatic，以及三种class member functions:static、nostatic和virtual。在该模型中，Nostatic data members被配置于每一个class object之内，static data members则被存放于个别的class object之外。static和nostatic function members也被放在个别的class object之外。Virtual function则有以下两个步骤支持：    
