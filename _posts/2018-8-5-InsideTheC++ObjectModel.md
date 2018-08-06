@@ -27,7 +27,7 @@ tags: C++ 读书提炼
 * class层级封装（class hierarchy）-面向对象模型    
   有一些彼此相关的类型，通过一个抽象的base class封装起来，用以提供共同接口用于继承。例如点坐标类。      
 
-**C++对象模型是怎样**：
+**C++对象模型是怎样**：     
 在C++对象中，有两种class data members:static和nostatic，以及三种class member functions:static、nostatic和virtual。在该模型中，Nostatic data members被配置于每一个class object之内，static data members则被存放于个别的class object之外。static和nostatic function members也被放在个别的class object之外。Virtual function则有以下两个步骤支持：    
 1. 每个class产生一堆指向virtual functions的指针，放在表格之中，这个表格成为virtual table(vtbl)。   
 2. 每个class object被按插一个指针，指向相关的virtual table。通常这个指针被成为vptr。vptr的设定和重置都由每一个class的构造、析构和拷贝赋值运算符自动完成。        
@@ -115,7 +115,8 @@ Bear &rb = *pb;
 ![](/images/posts/2018-8-5-InsideTheC++ObjectModel/InsideTheC++ObjectModel2.jpg)       
 
 * 常见问题思索：    
-1. 说出如下代码中一个Bear指针和一个ZooAnimal指针有什么不同？    
+
+1,说出如下代码中一个Bear指针和一个ZooAnimal指针有什么不同？    
 
 ```
 Bear b;    
@@ -125,7 +126,7 @@ Bear *pb = &b;
 
 答：它们都指向Bear object的第一个byte。其间的差别是，pb所涵盖的地址包含整个Bear object,而pz所涵盖的地址只包含Bear object中的ZooAnimal subobject。除了ZooAnimal subobject中出现的members，你不能使用pz来直接处理Bear的任何members(成员变量、成员函数、未覆盖基类的虚函数)。唯一例外是通过virtual机制。
 
-2. 说出如下代码中为什么rotate()所调用的是ZooAnimal实例而不是Bear实例？此外如果初始化函数将一个object内容完整拷贝到另一个object去，为什么za的vptr不执行Bear的virtual table？    
+2,说出如下代码中为什么rotate()所调用的是ZooAnimal实例而不是Bear实例？此外如果初始化函数将一个object内容完整拷贝到另一个object去，为什么za的vptr不执行Bear的virtual table？    
 
 ```
 Bear b;    
