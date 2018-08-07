@@ -17,7 +17,8 @@ tags: C++ 读书提炼
 
 ### 每章概述和感悟    
 
-#### **关于对象**    
+<br>
+#### **第一章：关于对象**    
   
 **在C++代码中对于对象的描述大致分为三种**：    
 * 程序性（procedural）-程序模型        
@@ -124,7 +125,8 @@ ZooAnimal *pz = &b;
 Bear *pb = &b;    
 ```    
 
-答：它们都指向Bear object的第一个byte。其间的差别是，pb所涵盖的地址包含整个Bear object,而pz所涵盖的地址只包含Bear object中的ZooAnimal subobject。除了ZooAnimal subobject中出现的members，你不能使用pz来直接处理Bear的任何members(成员变量、成员函数、未覆盖基类的虚函数)。唯一例外是通过virtual机制。
+答：    
+它们都指向Bear object的第一个byte。其间的差别是，pb所涵盖的地址包含整个Bear object,而pz所涵盖的地址只包含Bear object中的ZooAnimal subobject。除了ZooAnimal subobject中出现的members，你不能使用pz来直接处理Bear的任何members(成员变量、成员函数、未覆盖基类的虚函数)。唯一例外是通过virtual机制。
 
 2,说出如下代码中为什么rotate()所调用的是ZooAnimal实例而不是Bear实例？此外如果初始化函数将一个object内容完整拷贝到另一个object去，为什么za的vptr不执行Bear的virtual table？    
 
@@ -135,9 +137,16 @@ ZooAnimal za = b;   //这里会引起切割（sliced）
 //调用ZooAnimal::rotate()
 za.rotate();    
 ```    
-答：
+答：    
 第一个问题是，za并不是一个Bear,它是一个ZooAnimal。多态所造成的一个“一个以上的类型”的潜在力量，并不能够实际发挥在“直接存取objects”。多态不支持对于object的直接处理，只支持指针与引用类型。   
 第二个问题是，编译器在初始化及赋值操作之间做了仲裁。编译器必须确保如果某个object含有一个或一个以上的vptrs,那些vptrs的内容不会被 base class object初始化或改变。    
+
+3,不同类型的指针之间的差异？    
+答：    
+之间的差异，既不在其指针表示法不同，也不在其内容（代表一个地址）不同，而是在其所寻址出来的object类型不同，也就是说，“指针类型”会教导编译器如何解释某个特定地址中的内存内容及其大小。    
+
+<br>
+#### **第二章：构造函数语意学**    
 
 
 <br>
