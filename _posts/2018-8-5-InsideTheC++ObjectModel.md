@@ -20,7 +20,7 @@ tags: C++ 读书提炼
 <br>
 #### **第一章：关于对象**    
   
-**在C++代码中对于对象的描述大致分为三种**：    
+##### 在C++代码中对于对象的描述大致分为三种：    
 * 程序性（procedural）-程序模型        
   “数据”和“处理函数的操作”是分开来声明的，例如C语言的struct。  
 * 抽象数据类型（abstract data type,ADT）-抽象数据类型模型       
@@ -28,7 +28,7 @@ tags: C++ 读书提炼
 * class层级封装（class hierarchy）-面向对象模型    
   有一些彼此相关的类型，通过一个抽象的base class封装起来，用以提供共同接口用于继承。例如点坐标类。      
 
-**C++对象模型是怎样**：     
+##### C++对象模型是怎样：     
 在C++对象中，有两种class data members:static和nostatic，以及三种class member functions:static、nostatic和virtual。在该模型中，Nostatic data members被配置于每一个class object之内，static data members则被存放于个别的class object之外。static和nostatic function members也被放在个别的class object之外。Virtual function则有以下两个步骤支持：    
 1. 每个class产生一堆指向virtual functions的指针，放在表格之中，这个表格成为virtual table(vtbl)。   
 2. 每个class object被按插一个指针，指向相关的virtual table。通常这个指针被成为vptr。vptr的设定和重置都由每一个class的构造、析构和拷贝赋值运算符自动完成。        
@@ -56,10 +56,11 @@ protected:
 ![](/images/posts/2018-8-5-InsideTheC++ObjectModel/InsideTheC++ObjectModel0.jpg)   
 该模型的主要优点在于它的空间和存取时间的效率；主要缺点则是，如果应用程序代码本身未曾改变，但所用到的class objects 的nostatic data members有所修改，那么这些应用程序代码同样得重新编译。    
 
-**多态**    
-**多态的作用**：多态的主要用途是经由一个共同的接口来影响类型的封装，这个接口通常被定义在一个抽象的base class中。这个共享接口是以virtual function机制引发的，它可以在执行期根据object的真正类型解析出到底是哪一个函数实例被调用。      
+##### 多态        
+###### 多态的作用：    
+多态的主要用途是经由一个共同的接口来影响类型的封装，这个接口通常被定义在一个抽象的base class中。这个共享接口是以virtual function机制引发的，它可以在执行期根据object的真正类型解析出到底是哪一个函数实例被调用。      
 
-**类对象内存表示**     
+###### 类对象内存表示     
 需要多少内存才能表现一个class object?    
 * 其nonstatic data members的总和大小。    
 * 加上任何由于对齐的需求而填补上去的空间，可能存在于members之间，也可能存在于集合体边界。    
@@ -146,7 +147,10 @@ za.rotate();
 之间的差异，既不在其指针表示法不同，也不在其内容（代表一个地址）不同，而是在其所寻址出来的object类型不同，也就是说，“指针类型”会教导编译器如何解释某个特定地址中的内存内容及其大小。    
 
 <br>
-#### **第二章：构造函数语意学**    
+#### **第二章：构造函数语意学**   
+
+##### 默认构造        
+* 程序性 
 
 
 <br>
