@@ -238,13 +238,46 @@ c = a;			   //自定义拷贝赋值函数执行
 <br>
 #### **第三章：Data语意学**   
 
-##### **...**    
+##### **数据成员结构**    
+###### **类结构大小受那些因素影响**    
+1. 语言本身所造成的额外负担（overhead）当语言支持virtual base classes时，就会导致一些额外负担。    
+2. 编译器对于特殊情况所提供的优化处理。    
+3. Alignment对齐的限制。    
 
-    
+###### **数据成员绑定**    
+```
+#include <stdio.h>
+typedef int length;
+int x;
+class Point3d
+{
+	public:
+		Point3d():x(2){}
+		void numble(length val) {_val = val;}
 
-  
+		typedef float length;
+		length _val;
+		int x;
+};
 
 
+int main()
+{
+	Point3d p3d;
+
+	printf("x = %d\n", x);
+	printf("p3d.x = %d\n", p3d.x);
+	//numble(x); //这里报错类型不匹配
+	return 0;
+}
+``` 
+
+```
+输出：
+x = 0
+p3d.x = 2
+```
+在一个inline member function躯体之内的一个data member绑定操作，会在整个class声明完成之后才发生，此称为延迟评估。然而，这个对于成员函数function的argument list（不包括构造函数的参数列表）并不为真。Argument list中的名称还是会在他们第一次遭遇时被适当地决议（resolved）完成。因此在extern和nested type names之间的非直觉绑定操作还是会发生。例如上面代码，length的类型在两个member function signature中都决议（resolved）为global typedef，也就是int,当后续再有length的nested typedef声明出现时，C++standard就把稍微早点绑定标识为非法。    
 
 
 <br>
