@@ -116,7 +116,7 @@ Bear &rb = *pb;
 * 可能的内存布局如下所示：    
 ![](/images/posts/2018-8-5-InsideTheC++ObjectModel/InsideTheC++ObjectModel2.jpg)       
 
-* 常见问题思索：    
+###### **常见问题思索**：        
 
 1,说出如下代码中一个Bear指针和一个ZooAnimal指针有什么不同？    
 
@@ -278,6 +278,90 @@ x = 0
 p3d.x = 2
 ```
 在一个inline member function躯体之内的一个data member绑定操作，会在整个class声明完成之后才发生，此称为延迟评估。然而，这个对于成员函数function的argument list（不包括构造函数的参数列表）并不为真。Argument list中的名称还是会在他们第一次遭遇时被适当地决议（resolved）完成。因此在extern和nested type names之间的非直觉绑定操作还是会发生。例如上面代码，length的类型在两个member function signature中都决议（resolved）为global typedef，也就是int,当后续再有length的nested typedef声明出现时，C++standard就把稍微早点绑定标识为非法。    
+
+###### **数据成员的存取**    
+***静态数据成员***    
+1，静态数据成员，是被编译器提出于class之外，存放在程序的global data segment之中，每个静态数据成员只有一个实例。每个成员的存取许可（private、protected、public）,以及class关联，并不会招致任何空间上或执行时间上的额外负担，不论是在个别的class object还是在static data menber本身。     
+
+2， 若取一个static data member的地址，会得到一个指向其数据类型的指针，而不是一个指向其class member的指针，因为静态成员并不内含在一个class object之中，例如：    
+```
+&Point3d::chunkSize;
+```
+
+会获得类型如下的内存地址：    
+```
+const int *
+```  
+
+而不是如下执行Point3d data member的指针类型：    
+```
+int Point3d::*
+```
+
+若上述看不明白可参见如下所示：
+```
+float Point3d::*px = &Point3d::x
+```
+
+***非静态数据成员***    
+1，非静态数据成员直接存放在每一个class object之中，除非经由显示或隐式的，否则没有办法直接取得他们。    
+ 
+2，对于非静态成员变量的存取操作，编译器需要把class object的起始地址加上data member的偏移（offset），例如：   
+> origin._y = 0.0;
+> 那么地址&origin._y将等于：    
+> &origin + （&Point3d::_y - 1）
+> **注**：offset值总是被加一的，编译器为了区分出“一个指向data member的指针，用于指出class的第一个member”和“一个指向data member的指针，没有指出任何member”两种情况。    
+
+###### **继承与数据成员**    
+对于下面例子其成员结构为：
+```
+class Point2d{
+public:
+  //constructor(s)
+  //opertations
+  //access functions
+private:
+  float x, y;
+}
+
+class Point3d{
+public:
+  //constructor(s)
+  //opertations
+  //access functions
+private:
+  float x, y, z;
+}
+```
+
+***非继承数据布局图***    
+![](/images/posts/2018-8-5-InsideTheC++ObjectModel/InsideTheC++ObjectModel3.jpg)     
+
+***只要继承不要多态数据布局图***     
+![](/images/posts/2018-8-5-InsideTheC++ObjectModel/InsideTheC++ObjectModel4.jpg)     
+
+***加上多态数据布局图***        
+![](/images/posts/2018-8-5-InsideTheC++ObjectModel/InsideTheC++ObjectModel5.jpg)     
+
+***多重继承数据布局图***         
+
+
+###### **常见问题思索**：        
+1，以下两种方式进行存取x有什么重大差异吗？    
+```
+Point3d origin, *pt = &origin;
+origin.x = 0.0;
+pt->x = 0.0;
+```    
+答：当Point3d是一个`deriverd class`,而其继承结构中有一个`virtual base class`，并且被存取的member x是一个从该`virtual base class` 继承而来的`member`时，就会有重大的差异。这时候我们不能够说pt必然指向哪一种`class type`（因此，我们也就不知道比那一时期这个member真正的offset位置），所以这个存取操作必须延迟至执行期，经由一个额外的间接引导，才能够解决。如果使用`origin`，就不会有这些问题，其类型无疑是`Point3d class`,而即使它集成自`virtual base class`，`member`的offet位置也在编译时期固定了。    
+
+2，把两个原本不相干的class凑成一对`type/subtype`，并带有继承关系，易犯的错误？
+答：    
+* 重复设计一些相同操作的函数，例如构造函数和承载函数，有可能直接可以使用基类的。    
+* 把一个class分解成两层或更多层，有可能会为了“表现class体系之抽象化”而膨胀所需的空间。膨胀的原因是因为C++语言保证“出现在derive class 中的base class subobject”有其完整原样性。    
+
+3，什么叫自然多态？    
+答：单一继承就是提供了一种“自然多态”形式，是关于classes体系中的`base type`和`derived type`之间的转换。对于`base type`和`derived type`的object都是从相同的地址开始，期间差异只在于derived object比较大，用于多容纳它自己的nonstatic data member。     
 
 
 <br>
