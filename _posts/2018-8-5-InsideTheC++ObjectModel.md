@@ -376,7 +376,7 @@ _z += rhs._z
 Point2d *2d = pv3d?_pv3d->_vbcPoint2d:0;
 ```
 
-###### **常见问题思索**：        
+##### **常见问题思索**：        
 1，以下两种方式进行存取x有什么重大差异吗？    
 ```
 Point3d origin, *pt = &origin;
@@ -402,7 +402,24 @@ pt->x = 0.0;
 6，多重继承与虚拟继承的区别？    
 ![](/images/posts/2018-8-5-InsideTheC++ObjectModel/InsideTheC++ObjectModel8.jpg)     
 
+<br>
+#### **第四章：Function语意学**   
 
+C++支持三种类型的member functions:static、nonstatic和virtual，每种类型被调用的方式都不相同。    
+
+##### **成员的各种调用方式**    
+###### **非静态成员函数**    
+C++的设计准则之一就是：`nonstatic member function`至少必须和一般的nonmember function 有相同的效率，即选择`member function`不应该带来什么额外负担，这是因为编译器内部已将“member函数实例”转换为对等的“nonmember函数实例”。    
+
+
+
+##### **常见问题思索**      
+1，static member functions不能实现的方式？    
+答：    
+* 函数中直接存取nonstatic数据。    
+* 函数被声明为const。例如`float Point3d::mangintude() const {...}`
+
+2，
 
 <br>
 持续更新中......    
