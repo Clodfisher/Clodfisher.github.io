@@ -344,7 +344,37 @@ private:
 ![](/images/posts/2018-8-5-InsideTheC++ObjectModel/InsideTheC++ObjectModel5.jpg)     
 
 ***多重继承数据布局图***         
+![](/images/posts/2018-8-5-InsideTheC++ObjectModel/InsideTheC++ObjectModel6.jpg)     
 
+![](/images/posts/2018-8-5-InsideTheC++ObjectModel/InsideTheC++ObjectModel7.jpg)     
+
+***虚拟继承数据布局图***     
+![](/images/posts/2018-8-5-InsideTheC++ObjectModel/InsideTheC++ObjectModel9.jpg)     
+
+![](/images/posts/2018-8-5-InsideTheC++ObjectModel/InsideTheC++ObjectModel10.jpg)     
+
+###### **虚拟继承特点**    
+Class如果内含一个或多个`virtual base class subobjects`,像`iostream`那样，将被分割为两部分：一个**不变区域**和一个**共享区域**。不变区域中的数据，不管后继如何衍化，总是有固定的offset（从object的开头算起），所以这一部分数据可以直接存取。至于共享区域，所表现的就是`virtual base class subobjects`。这一部分的数据，其位置会因为每次的派生操作而又变化，所以它只可以被间接存取。代码如下所示：    
+```
+void Point3d::operator+=( const Point3d &rhs)
+{
+  _x += rhs._x;
+  _y += rhs._y;
+  _z += rhs._z;
+}
+
+Point2d *p2d = pv3d;
+```
+
+在cfront策略之下，这个运行符会被内部转换为：
+```
+//C++伪代码
+_vbcPoint2d->_x += rhs._vbcPoint2d->_x;
+_vbcPoint2d->_y += rhs._vbcPoint2d->_y;
+_z += rhs._z
+
+Point2d *2d = pv3d?_pv3d->_vbcPoint2d:0;
+```
 
 ###### **常见问题思索**：        
 1，以下两种方式进行存取x有什么重大差异吗？    
@@ -362,6 +392,16 @@ pt->x = 0.0;
 
 3，什么叫自然多态？    
 答：单一继承就是提供了一种“自然多态”形式，是关于classes体系中的`base type`和`derived type`之间的转换。对于`base type`和`derived type`的object都是从相同的地址开始，期间差异只在于derived object比较大，用于多容纳它自己的nonstatic data member。     
+
+4，多重继承的复杂度在于？    
+答：在于derived class和其上一个base class乃至上上个base class......之间的“非自然关系”。    
+
+5，存取第二个（或后继）base class中的一个data member，会付出额外的成本吗？    
+答：不，member的位置在编译时就固定了，因此存取member只是一个简单的offset运算，就像单一继承一样简单，不管是经由一个指针、一个reference或是一个object来存取。    
+
+6，多重继承与虚拟继承的区别？    
+![](/images/posts/2018-8-5-InsideTheC++ObjectModel/InsideTheC++ObjectModel8.jpg)     
+
 
 
 <br>
