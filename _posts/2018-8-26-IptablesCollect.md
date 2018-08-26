@@ -24,10 +24,10 @@ Netfilter/IPTables是Linux2.4.x之后新一代的Linux防火墙机制，是linux
 ![](/images/posts/2018-8-26-IptablesCollect/IptablesCollect1.jpg)       
 
 IPTables是用户空间的工具，它提供了4张表，分别是：    
-    |    name    | age |   
-    | ---------- | --- |   
-    | LearnShare |  12 |   
-    | Mike       |  32 |  
+  |    name    | age |   
+  | ---------- | --- |   
+  | LearnShare |  12 |   
+  | Mike       |  32 |  
        
 
 ### 每章概述和感悟    
