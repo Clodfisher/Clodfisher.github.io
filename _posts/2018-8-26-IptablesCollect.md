@@ -5,9 +5,11 @@ date: 2018-8-26
 tags: 网络安全           
 ---
 
+<br>
 ### 前言    
 本文主要是对于网上或书上关于iptables感觉不错的文章进行汇总，以供自己参考、学习、提升为理论知识，从而更好的了解Linux内核中对于netfilter实现过程。    
 
+<br>
 ### Netfilter概述             
 Netfilter/IPTables是Linux2.4.x之后新一代的Linux防火墙机制，是linux内核的一个子系统。Netfilter采用模块化设计，具有良好的可扩充性。其重要工具模块IPTables从用户态的iptables连接到内核态的Netfilter的架构中，Netfilter与IP协议栈是无缝契合的，并允许使用者对数据报进行过滤、地址转换、处理等操作。Netfilter支持通过以下方式对数据包进行分类：    
 * 源IP地址    
@@ -19,6 +21,7 @@ Netfilter/IPTables是Linux2.4.x之后新一代的Linux防火墙机制，是linux
     
 ![](/images/posts/2018-8-26-IptablesCollect/IptablesCollect0.jpg)       
 
+<br>
 ### Netfilter/IPTables的框架    
 其主要通过表、链实现规则，可以这么说，Netfilter是表的容器，表是链的容器，链是规则的容器，最终形成对数据报处理规则的实现。简单地讲， tables 由 chains 组成，而 chains 又由 rules 组成。 iptables 默认有四个表 Filter, NAT, Mangle, Raw ，其对于的链如下图：    
 ![](/images/posts/2018-8-26-IptablesCollect/IptablesCollect1.jpg)       
@@ -33,7 +36,8 @@ IPTables是用户空间的工具，它提供了4张表，分别是：
  
 优先级顺序是：raw ---> mangle --->  nat ---> filter。也就是说在某一个链上有多张表，数据包都会依次按照hook点的方向进行传输，每个hook点上Netfilter又按照优先级挂了很多hook函数（即表），就是按照这个顺序依次处理。无论那一个Filter表其匹配原则都是“First Match”，即优先执行，第一条规则逐一向下匹配，如果封包进来遇到第一条规则允许通过，那么这个封包就通过，而不管下面的rule2、rule3的规则是什么都不重要；相反如果第一条规则说要丢弃，即便是rule2规则允许通过也不起任何作用，这就是“first match”原则。       
 ![](/images/posts/2018-8-26-IptablesCollect/IptablesCollect5.jpg)       
-   
+
+<br>   
 ###  Iptables基本操作    
 启动 `iptables` ： `service iptables start`    
 
@@ -51,6 +55,7 @@ IPTables是用户空间的工具，它提供了4张表，分别是：
 
 打开 `iptables` 转发： `echo "1"> /proc/sys/net/ipv4/ip_forward`   
 
+<br>
 ### Iptables语法    
 通过向防火墙提供有关对来自某个源地址、到某个目的地或具有特定协议类型的信息包要做些什么的指令，规则控制信息包的过滤。通过使用iptables系统提供的特殊命令iptables建立这些规则，并将其添加到内核空间特定信息包过滤表内的链中。关于添加、去除、编辑规则的命令，一般语法如下：    
 > `Iptables [-t table] command [chain] [rules] [-j target]`    
@@ -133,7 +138,21 @@ c) 常用显式扩展：
 > QUEUE：防火墙将数据包移交到用户空间     
 > RETURN：防火墙停止执行当前链中的后续Rules，并返回到调用链(the calling chain)     
 
+<br>
 ### Iptables 常见命令    
+
+#### 流量统计    
+##### 对特定IP进行流量统计    
+> 统计服务器上的IP：192.168.0.10的入网流量：
+> iptables -I INPUT -d 192.168.0.10
+> 统计该IP的出网流量：
+> iptables -I OUTPUT -s 192.168.0.10
+
+##### 查看流量    
+> iptables -n -v -L -t filter 默认是使用易读的单位，也就是自动转化成M，G。如过需要Bytes做单> 位，则增加一个-x参数
+iptables -n -v -L -t filter -x
+
+
    
 
 <br>
@@ -149,7 +168,8 @@ c) 常用显式扩展：
 [Netfilter 概述及其hook点](https://blog.csdn.net/liukun321/article/details/54577433)      
 [玩转高性能超猛防火墙nf-HiPAC](https://blog.csdn.net/dog250/article/details/41289217?locationNum=2&fps=1)      
 [25个常用的iptables命令](http://blog.51cto.com/nashsun/1847526)      
-[搭建基于netfilter/iptables的防火墙实验环境](http://tech.sina.com.cn/roll/2008-12-18/1719922251.shtml)      
+[搭建基于netfilter/iptables的防火墙实验环境](http://tech.sina.com.cn/roll/2008-12-18/1719922251.shtml)     
+[流量统计 iptables](https://blog.csdn.net/u014015972/article/details/50647039)          
 
 
 
