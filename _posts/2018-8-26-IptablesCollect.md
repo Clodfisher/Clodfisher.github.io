@@ -39,6 +39,8 @@ IPTables是用户空间的工具，它提供了4张表，分别是：
 
 <br>   
 ###  Iptables基本操作    
+#### service命令    
+
 启动 `iptables` ： `service iptables start`    
 
 关闭 `iptables` ： `service iptables stop`   
@@ -48,6 +50,22 @@ IPTables是用户空间的工具，它提供了4张表，分别是：
 查看 `iptables` 状态： `service iptables status`    
 
 保存 `iptables` 配置： `service iptables save`    
+
+#### systemctl命令    
+
+`systemctl start iptables.service` #启动防火墙    
+
+`systemctl stop iptables.service` #停止防火墙    
+
+`systemctl restart iptables.service` #重启防火墙    
+
+`systemctl enable iptables.service` #设置防火墙开机启动    
+
+`systemctl disable iptables.service` #防火墙开机禁用     
+
+`systemctl status iptables.service` # 查看状态    
+
+#### 其它    
 
 `Iptables` 服务配置文件： `/etc/sysconfig/iptables-config`    
 
@@ -169,7 +187,9 @@ iptables -n -v -L -t filter -x
 [玩转高性能超猛防火墙nf-HiPAC](https://blog.csdn.net/dog250/article/details/41289217?locationNum=2&fps=1)      
 [25个常用的iptables命令](http://blog.51cto.com/nashsun/1847526)      
 [搭建基于netfilter/iptables的防火墙实验环境](http://tech.sina.com.cn/roll/2008-12-18/1719922251.shtml)     
-[流量统计 iptables](https://blog.csdn.net/u014015972/article/details/50647039)          
+[流量统计 iptables](https://blog.csdn.net/u014015972/article/details/50647039)     
+[CentOS7启用iptables防火墙](https://www.jianshu.com/p/01edf3c67a1b)     
+[CentOS7安装iptables防火墙](https://www.cnblogs.com/kreo/p/4368811.html)         
 
 
 
