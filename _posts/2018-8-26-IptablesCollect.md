@@ -7,7 +7,7 @@ tags: 网络安全
 
 <br>
 ### 前言    
-本文主要是对于网上或书上关于iptables感觉不错的文章进行汇总，以供自己参考、学习、提升为理论知识，从而更好的了解Linux内核中对于netfilter实现过程。    
+本文主要是对于网上或书上关于iptables感觉不错的文章进行汇总，以供自己参考、学习、提升为理论知识，从而更好的了解Linux内核中对于netfilter实现过程。在防火墙关闭状态下，不要通过iptables指令（比如 iptables -nL）来查看当前状态！因为这样会导致防火墙被启动，而且规则为空。虽然不会有任何拦截效果，但所有连接状态都会被记录，浪费资源且影响性能并可能导致防火墙主动丢包！若是要加载`/etc/sysconfig/iptables`中规则，需要重启防火墙`systemctl restart iptables.service`，或是开机启动`systemctl enable iptables.service`。            
 
 <br>
 ### Netfilter概述             
@@ -57,7 +57,7 @@ IPTables是用户空间的工具，它提供了4张表，分别是：
 
 `systemctl stop iptables.service` #停止防火墙    
 
-`systemctl restart iptables.service` #重启防火墙    
+`systemctl restart iptables.service` #重启防火墙，才能使规则生效        
 
 `systemctl enable iptables.service` #设置防火墙开机启动    
 
@@ -70,6 +70,8 @@ IPTables是用户空间的工具，它提供了4张表，分别是：
 `Iptables` 服务配置文件： `/etc/sysconfig/iptables-config`    
 
 `Iptables` 规则保存文件： `/etc/sysconfig/iptables`    
+
+对配置的规则进行存档`service iptables save`    
 
 打开 `iptables` 转发： `echo "1"> /proc/sys/net/ipv4/ip_forward`   
 
