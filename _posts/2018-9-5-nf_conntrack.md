@@ -12,7 +12,8 @@ iptables 的 nat 通过规则来修改目的/源地址,但光修改地址不行,
 
 `iptables -A INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT。`    
 
-#### nf_conntrack模块常用命令    
+<br>
+### nf_conntrack模块常用命令    
 
 ```
 查看nf_conntrack表
@@ -32,15 +33,20 @@ nf_defrag_ipv6         11182  1 nf_conntrack_ipv6
 nf_conntrack           79758  3 nf_conntrack_ipv4,nf_conntrack_ipv6,xt_state    
 ipv6                  317340  28 sctp,ip6t_REJECT,nf_conntrack_ipv6,nf_defrag_ipv6  
 
+移除 nf_conntrack 模块
+$ sudo modprobe -r xt_NOTRACK nf_conntrack_netbios_ns nf_conntrack_ipv4 xt_state
+$ sudo modprobe -r nf_conntrack
+
 查看当前的连接数:
 grep nf_conntrack /proc/slabinfo
 
 查出目前 nf_conntrack 的排名:
 cat /proc/net/nf_conntrack | cut -d ' ' -f 10 | cut -d '=' -f 2 | sort | uniq -c | sort -nr | head -n 10
 ```
-   
-#### nf_conntrack会话表的内容解释    
-##### 会话表样例    
+
+<br>   
+### nf_conntrack会话表的内容解释    
+#### **会话表样例**    
 通过`conntrack -L`与`/proc/net/nf_conntrack`是完全一样的，除了少了前面的两列。    
 下面以`cat /proc/net/nf_conntrack`为例进行说明：    
 ```
@@ -49,7 +55,7 @@ ipv4  2  tcp  6  299  ESTABLISHED  src=172.18.15.56  dst=172.18.15.96    sport=4
 ipv4  2  tcp  6  5    SYN_SENT     src=182.168.77.7  dst=221.181.72.250  sport=57428  dport=443  [UNREPLIED]       src=221.181.72.250  dst=182.168.77.7  sport=443    dport=57428  mark=0  secctx=system_u:object_r:unlabeled_t:s0  zone=0  use=2
 ipv4  2  tcp  6  1    SYN_SENT     src=182.168.77.7  dst=221.181.72.250  sport=57427  dport=80   [UNREPLIED]       src=221.181.72.250  dst=182.168.77.7  sport=80     dport=57427  mark=0  secctx=system_u:object_r:unlabeled_t:s0  zone=0  use=2
 ```
-##### 每一列表达的意思    
+#### **每一列表达的意思**    
 * 第一列：网络层协议名字。    
 * 第二列：网络层协议号。    
 * 第三列：传输层协议名字。    
@@ -58,21 +64,21 @@ ipv4  2  tcp  6  1    SYN_SENT     src=182.168.77.7  dst=221.181.72.250  sport=5
 * 第六列：不是所有协议都有，连接状态。    
 * 其它的列都是通过名字的方式（key与value对)表述，或和呈现标识（[UNREPLIED], [ASSURED], ...）。一行的不同列可能包含相同的名字（例如src和dst），第一个表示请求方，第二个表示应答方。    
 
-##### 呈现标识含义    
-* [ASSURED]: 在两个方面（即请求和响应）方向都看到了流量。    
-* [UNREPLIED]: 尚未在响应方向上看到流量。如果连接跟踪缓存溢出，则首先删除这些连接。  
+#### **呈现标识含义**    
+* `[ASSURED]`: 在两个方面（即请求和响应）方向都看到了流量。    
+* `[UNREPLIED]`: 尚未在响应方向上看到流量。如果连接跟踪缓存溢出，则首先删除这些连接。  
 
 请注意，某些列名仅出现在特定协议中（例如，TCP和UDP的sport和dport，ICMP的type和code）。
 仅当内核使用特定选项构建时，才会显示其他列名称（例如mark）。  
 
-##### 举例说明    
+#### **举例说明**    
 * `ipv4 2 tcp 6 300 ESTABLISHED src=1.1.1.2 dst=2.2.2.2 sport=2000 dport=80 src=2.2.2.2 dst=1.1.1.1 sport=80 dport=12000 [ASSURED] mark=0 use=2`    
 属于从主机1.1.1.2，端口2000到主机2.2.2.2，端口80的已建立的TCP连接，从中将响应发送到主机1.1.1.2，端口2000，在五分钟内超时。对于此连接，已在两个方向上看到数据包。    
 
 * `ipv4 2 icmp 1 3 src=1.1.1.2 dst=1.1.1.1 type=8 code=0 id=32354 src=1.1.1.1 dst=1.1.1.2 type=0 code=0 id=32354 mark=0 use=2`    
 属于从主机1.1.1.2到主机1.1.1.1的ICMP回应请求数据包，具有从主机1.1.1.1到主机1.1.1.2的预期回应应答数据包，在三秒内超时。响应目标主机不一定与请求源主机相同，因为请求源地址可能已被响应目标主机伪装。    
 
-##### 主要标识   
+#### **主要标识**   
 请注意，以下信息可能不是最新信息！    
 
 Fields available for all entries:    
@@ -136,7 +142,8 @@ Allowed values for the sixth field:
 > SYN_SENT2    
 > TIME_WAIT    
 
-#### nf_conntrack相关内核参数和解释    
+<br>
+### nf_conntrack相关内核参数和解释    
 参考内核帮助文档`/usr/share/doc/kernel-doc-3.10.0/Documentation/networking/nf_conntrack-sysctl.txt`    
 /proc/sys/net/netfilter/nf_conntrack_*:    
 
@@ -297,9 +304,10 @@ default 30
 default 180      
 如果检测到UDP流，将使用此扩展超时。    
 
-还有多少秒这条会话信息会从跟踪表清除，取决于超时参数的配置，以及是否有包传输，有包传输时，这个时间会重置为超时时间。    
-
-#### 如何判断会话表是否满    
+还有多少秒这条会话信息会从跟踪表清除，取决于超时参数的配置，以及是否有包传输，有包传输时，这个时间会重置为超时时间。  
+  
+<br>
+### 如何判断会话表是否满    
 当会话表中的记录大于内核设置nf_conntrack_max的值时，会导致会话表满。    
 ```
 nf_conntrack_max - INTEGER  
@@ -314,8 +322,8 @@ Nov  3 23:30:27 digoal_host kernel: : [63500383.870591] nf_conntrack: table full
 Nov  3 23:30:27 digoal_host kernel: : [63500383.962423] nf_conntrack: table full, dropping packet.  
 Nov  3 23:30:27 digoal_host kernel: : [63500384.060399] nf_conntrack: table full, dropping packet.  
 ```
-
-#### 会话表满的解决办法     
+<br>
+### 会话表满的解决办法     
   
 nf_conntrack table full的问题，会导致丢包，影响网络质量，严重时甚至导致网络不可用。
 
@@ -340,6 +348,30 @@ nf_conntrack table full的问题，会导致丢包，影响网络质量，严重
 vi /etc/sysctl.conf  
 net.nf_conntrack_max = 10240000  
 ```
+<br>
+### 计算公式    
+可以增大 conntrack 的条目(sessions, connection tracking entries) CONNTRACK_MAX 或者增加存储 conntrack 条目哈希表的大小 HASHSIZE    
+默认情况下，CONNTRACK_MAX 和 HASHSIZE 会根据系统内存大小计算出一个比较合理的值：    
+对于 CONNTRACK_MAX，其计算公式：    
+CONNTRACK_MAX = RAMSIZE (in bytes) / 16384 / (ARCH / 32)    
+比如一个 64 位 48G 的机器可以同时处理 48*1024^3/16384/2 = 1572864 条 netfilter 连接。对于大于 1G 内存的系统，默认的 CONNTRACK_MAX 是 65535。    
+
+对于 HASHSIZE，默认的有这样的转换关系：    
+CONNTRACK_MAX = HASHSIZE * 8    
+这表示每个链接列表里面平均有 8 个 conntrack 条目。其真正的计算公式如下：    
+HASHSIZE = CONNTRACK_MAX / 8 = RAMSIZE (in bytes) / 131072 / (ARCH / 32)    
+比如一个 64 位 48G 的机器可以存储 48*1024^3/131072/2 = 196608 的buckets(连接列表)。对于大于 1G 内存的系统，默认的 HASHSIZE 是 8192。    
+
+可以通过 echo 直接修改目前系统 CONNTRACK_MAX 以及 HASHSIZE 的值：     
+$ `echo 100000 > /proc/sys/net/netfilter/nf_conntrack_max`        
+$ `echo 50000 > /proc/sys/net/netfilter/nf_conntrack_buckets`       
+
+还可以缩短 timeout 的值：    
+$`echo 600 > /proc/sys/net/netfilter/  nf_conntrack_tcp_timeout_established`       
+
+<br>
+参考链接：    
+[解决 nf_conntrack: table full, dropping packet 的几种思路](http://jaseywang.me/2012/08/16/%E8%A7%A3%E5%86%B3-nf_conntrack-table-full-dropping-packet-%E7%9A%84%E5%87%A0%E7%A7%8D%E6%80%9D%E8%B7%AF/)  
 
 <br> 
 转载请注明：[HunterYuan的博客](https://clodfisher.github.io/) » [Iptables之nf_conntrack模块](https://clodfisher.github.io/2018/09/nf_conntrack/)              

@@ -31,6 +31,9 @@ RPS是和RSS类似的一个技术，区别在于RSS是网的硬件实现而RPS�
 ####  XPS(Transmit Packet Steering)    
 XPS通过创建CPU到网卡发送队列的对应关系，来保证处理发送软中断请求的CPU和向外发送数据包的CPU是同一个CPU，用来保证发送数据包时候的局部性。xps主要是针对多队列的网卡发送时的优化，当发送一个数据包的时候，它会根据CPU来选择对应的队列。        
 
+<br>
+参考链接：    
+[开启网卡多队列功能](https://support.huaweicloud.com/usermanual-ecs/zh-cn_topic_0058758453.html)           
 
 <br>
 参考链接：    

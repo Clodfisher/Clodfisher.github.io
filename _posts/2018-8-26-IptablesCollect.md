@@ -73,7 +73,13 @@ IPTables是用户空间的工具，它提供了4张表，分别是：
 
 对配置的规则进行存档`service iptables save`    
 
+保存当前iptables规则到配置文件 `iptables-save > /etc/sysconfig/iptables `    
+
+从配置文件，恢复iptables规则`iptables-restore < /etc/sysconfig/iptables`    
+
 打开 `iptables` 转发： `echo "1"> /proc/sys/net/ipv4/ip_forward`   
+
+查看当前系统中生效的所有参数`/usr/sbin/sysctl –a`     
 
 <br>
 ### Iptables语法    
