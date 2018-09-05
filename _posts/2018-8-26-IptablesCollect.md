@@ -163,14 +163,20 @@ c) 常用显式扩展：
 
 #### 流量统计    
 ##### 对特定IP进行流量统计    
-> 统计服务器上的IP：192.168.0.10的入网流量：
-> iptables -I INPUT -d 192.168.0.10
-> 统计该IP的出网流量：
-> iptables -I OUTPUT -s 192.168.0.10
+> 统计服务器上的IP：192.168.0.10的入网流量：    
+> `iptables -I INPUT -d 192.168.0.10`    
+> 统计该IP的出网流量：    
+> `iptables -I OUTPUT -s 192.168.0.10`    
 
 ##### 查看流量    
-> iptables -n -v -L -t filter 默认是使用易读的单位，也就是自动转化成M，G。如过需要Bytes做单> 位，则增加一个-x参数
-iptables -n -v -L -t filter -x
+> `iptables -n -v -L -t filter` 默认是使用易读的单位，也就是自动转化成M，G。如过需要Bytes做单位，则增加一个-x参数    
+`iptables -n -v -L -t filter -x`    
+
+##### 显示每条规则的序列号和额外信息    
+> `iptables -L -n -v --line-number`    
+
+##### 在几号规则前插入一条所有都能通过规则    
+> `iptables -I FORWARD 1 -j ACCEPT`    
 
 
    
