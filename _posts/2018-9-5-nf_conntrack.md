@@ -346,18 +346,27 @@ nf_conntrack table full的问题，会导致丢包，影响网络质量，严重
 
 #### 解决方法举例：
 
-1、排查是否DDoS攻击，如果是，从预防攻击层面解决问题。
+1、排查是否DDoS攻击，如果是，从预防攻击层面解决问题。    
 
-2、清空会话表。
+2、清空会话表。    
 
-重启iptables，会自动清空nf_conntrack table。注意，重启前先保存当前iptables配置(iptables-save > /etc/sysconfig/iptables ; service iptables restart)。
+重启iptables，会自动清空nf_conntrack table。注意，重启前先保存当前iptables配置(iptables-save > /etc/sysconfig/iptables ; service iptables restart)。    
 
-3、应用程序正常关闭会话
+3、应用程序正常关闭会话     
 
-设计应用时，正常关闭会话很重要。
+设计应用时，正常关闭会话很重要。    
 
-4、加大表的上限（需要考虑内存的消耗）
+4、加大表的上限（需要考虑内存的消耗）    
 
+#### 例举故障原因     
+1. 内核参数 net.nf_conntrack_max 系统默认值为”65536”，当nf_conntrack模块被装置且服务器上连接超过这个设定的值时，系统会主动丢掉新连接包，直到连接小于此设置值才会恢复。同时内核参数“net.netfilter.nf_conntrack_tcp_timeout_established”系统默认值为”432000”，代表nf_conntrack的TCP连接记录时间默认是5天，致使nf_conntrack的值减不下来，丢包持续时间长。    
+
+2. nf_conntrack模块在首次装载或重新装载时，内核参数net.nf_conntrack_max会重新设置为默认值“65536”，并且不会调用sysctl设置为我们的预设值。    
+
+3. 触发nf_conntrack模块首次装载比较隐蔽，任何调用IPtable NAT功能的操作都会触发。当系统没有挂载nf_conntrack模块时，iptables 相关命令（iptables -L -t nat）就成触发nf_conntrack模块装置，致使net.nf_conntrack_max 重设为65536。    
+
+4. 触发nf_conntrack模块重新装载的操作很多，CentOS6 中“service iptables restart”，CentOS7中“systemctl restart firewalld”都会触发设置重置，致使net.nf_conntrack_max 重设为65536。     
+  
 #### 修改参数：    
 
 * 或通过sysctl命令进行修改：    
