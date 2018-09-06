@@ -2,7 +2,7 @@
 layout: post
 title: 用Shell实现简单爬虫
 date: 2018-2-10 
-tags: Shell        
+tags: shell        
 ---
 <br>
 **第一步**：你得先进行页面的获取吧，这时候使用到curl命令    

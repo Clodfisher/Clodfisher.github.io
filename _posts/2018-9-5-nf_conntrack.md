@@ -1,7 +1,7 @@
 ---
 layout: post    
 title: Iptables之nf_conntrack模块    
-date: 2018-8-26    
+date: 2018-9-5    
 tags: 网络安全 iptables           
 ---
 
@@ -16,8 +16,20 @@ iptables 的 nat 通过规则来修改目的/源地址,但光修改地址不行,
 ### nf_conntrack模块常用命令    
 
 ```
-查看nf_conntrack表
-cat /proc/net/nf_conntrack
+查看nf_conntrack表当前连接数    
+cat /proc/sys/net/netfilter/nf_conntrack    
+
+查看nf_conntrack表最大连接数    
+cat /proc/sys/net/netfilter/nf_conntrack_max    
+
+通过dmesg可以查看nf_conntrack的状况：
+dmesg |grep nf_conntrack
+
+查看存储conntrack条目的哈希表大小,此为只读文件
+cat /proc/sys/net/netfilter/nf_conntrack_buckets
+
+查看nf_conntrack的TCP连接记录时间
+cat /proc/sys/net/netfilter/nf_conntrack_tcp_timeout_established
 
 通过conntrack命令行工具查看conntrack的内容
 yum install -y conntrack  
@@ -361,17 +373,40 @@ CONNTRACK_MAX = HASHSIZE * 8
 这表示每个链接列表里面平均有 8 个 conntrack 条目。其真正的计算公式如下：    
 HASHSIZE = CONNTRACK_MAX / 8 = RAMSIZE (in bytes) / 131072 / (ARCH / 32)    
 比如一个 64 位 48G 的机器可以存储 48*1024^3/131072/2 = 196608 的buckets(连接列表)。对于大于 1G 内存的系统，默认的 HASHSIZE 是 8192。    
+ 
+`nf_conntrack_max`决定连接跟踪表的大小,当nf_conntrack模块被装置且服务器上连接超过这个设定的值时，系统会主动丢掉新连接包，直到连接小于此设置值才会恢复。       
+`nf_conntrack_buckets`决定存储conntrack条目的哈希表大小。    
+`nf_conntrack_tcp_timeout_established`系统默认值为”432000”，代表nf_conntrack的TCP连接记录时间默认是5天，致使nf_conntrack的值减不下来，丢包持续时间长。        
+通过修改这两个值即可，但是**nf_conntrack_buckets时个只读文件**，无法进行修改。    
+* 可以通过 echo 直接修改目前系统 CONNTRACK_MAX 以及 HASHSIZE 的值，缩短 timeout 的值：    
+```     
+$ echo 100000 > /proc/sys/net/netfilter/nf_conntrack_max        
+$ echo 50000 > /proc/sys/net/netfilter/nf_conntrack_buckets      
+$ echo 600 > /proc/sys/net/netfilter/nf_conntrack_tcp_timeout_established    
+```
 
-可以通过 echo 直接修改目前系统 CONNTRACK_MAX 以及 HASHSIZE 的值：     
-$ `echo 100000 > /proc/sys/net/netfilter/nf_conntrack_max`        
-$ `echo 50000 > /proc/sys/net/netfilter/nf_conntrack_buckets`       
+* 或通过sysctl命令进行修改：    
+```
+$ sysctl -w net.netfilter.nf_conntrack_max=1048576
+$ sysctl -w net.netfilter.nf_conntrack_buckets=262144
+$ sysctl -w net.netfilter.nf_conntrack_tcp_timeout_established=3600
+$ sysctl -p #使生效
+```   
 
-还可以缩短 timeout 的值：    
-$`echo 600 > /proc/sys/net/netfilter/  nf_conntrack_tcp_timeout_established`       
+* 或是直接永久性修改：        
+```
+echo 'net.netfilter.nf_conntrack_max=1048576' >> /etc/sysctl.conf
+echo 'net.netfilter.nf_conntrack_buckets=262144' >> /etc/sysctl.conf
+echo 'net.netfilter.nf_conntrack_tcp_timeout_established=3600' >> /etc/sysctl.conf
+reboot
+```
+
 
 <br>
 参考链接：    
-[解决 nf_conntrack: table full, dropping packet 的几种思路](http://jaseywang.me/2012/08/16/%E8%A7%A3%E5%86%B3-nf_conntrack-table-full-dropping-packet-%E7%9A%84%E5%87%A0%E7%A7%8D%E6%80%9D%E8%B7%AF/)  
+[解决 nf_conntrack: table full, dropping packet 的几种思路](http://jaseywang.me/2012/08/16/%E8%A7%A3%E5%86%B3-nf_conntrack-table-full-dropping-packet-%E7%9A%84%E5%87%A0%E7%A7%8D%E6%80%9D%E8%B7%AF/)       
+[Linux服务器丢包故障的解决思路及引申的TCP/IP协议栈理论](https://www.sdnlab.com/17530.html)     
+
 
 <br> 
 转载请注明：[HunterYuan的博客](https://clodfisher.github.io/) » [Iptables之nf_conntrack模块](https://clodfisher.github.io/2018/09/nf_conntrack/)              

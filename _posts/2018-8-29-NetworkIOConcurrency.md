@@ -29,12 +29,13 @@ RPS是和RSS类似的一个技术，区别在于RSS是网的硬件实现而RPS�
 在使用RPS接收数据包之后，会在指定的CPU进行软中断处理，之后就会在用户态进行处理；如果用户态处理的CPU不在软中断处理的CPU，则会造成CPU cache miss，造成很大的性能影响。RFS能够保证处理软中断和处理应用程序是同一个CPU，这样会保证local cache hit，提升处理效率。RFS需要和RPS一起配合使用。         
 
 ####  XPS(Transmit Packet Steering)    
-XPS通过创建CPU到网卡发送队列的对应关系，来保证处理发送软中断请求的CPU和向外发送数据包的CPU是同一个CPU，用来保证发送数据包时候的局部性。xps主要是针对多队列的网卡发送时的优化，当发送一个数据包的时候，它会根据CPU来选择对应的队列。        
-
-<br>
-参考链接：    
-[开启网卡多队列功能](https://support.huaweicloud.com/usermanual-ecs/zh-cn_topic_0058758453.html)           
+XPS通过创建CPU到网卡发送队列的对应关系，来保证处理发送软中断请求的CPU和向外发送数据包的CPU是同一个CPU，用来保证发送数据包时候的局部性。xps主要是针对多队列的网卡发送时的优化，当发送一个数据包的时候，它会根据CPU来选择对应的队列。          
 
 <br>
 参考链接：    
 [容器云负载均衡之三：RSS、RPS、RFS和XPS调整](https://blog.csdn.net/cloudvtech/article/details/80182074)            
+[开启网卡多队列功能](https://support.huaweicloud.com/usermanual-ecs/zh-cn_topic_0058758453.html)           
+
+
+<br> 
+转载请注明：[HunterYuan的博客](https://clodfisher.github.io/) » [Iptables之nf_conntrack模块](https://clodfisher.github.io/2018/08/NetworkIOConcurrency/)             
