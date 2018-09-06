@@ -31,6 +31,9 @@ cat /proc/sys/net/netfilter/nf_conntrack_buckets
 查看nf_conntrack的TCP连接记录时间
 cat /proc/sys/net/netfilter/nf_conntrack_tcp_timeout_established
 
+通过内核参数查看命令，查看所有参数配置
+sysctl -a | grep nf_conntrack
+
 通过conntrack命令行工具查看conntrack的内容
 yum install -y conntrack  
 conntrack -L  
@@ -358,7 +361,7 @@ nf_conntrack table full的问题，会导致丢包，影响网络质量，严重
 
 3. 触发nf_conntrack模块首次装载比较隐蔽，任何调用IPtable NAT功能的操作都会触发。当系统没有挂载nf_conntrack模块时，iptables 相关命令（iptables -L -t nat）就成触发nf_conntrack模块装置，致使net.nf_conntrack_max 重设为65536。    
 
-4. 触发nf_conntrack模块重新装载的操作很多，CentOS6 中“service iptables restart”，CentOS7中“systemctl restart firewalld”都会触发设置重置，致使net.nf_conntrack_max 重设为65536。     
+4. 触发nf_conntrack模块重新装载的操作很多，CentOS6 中“service iptables restart”，CentOS7中“systemctl restart iptables.service”都会触发设置重置，致使net.nf_conntrack_max 重设为65536。     
 
 #### **重要的几个配置文件**    
 `nf_conntrack_max`决定连接跟踪表的大小,当nf_conntrack模块被装置且服务器上连接超过这个设定的值时，系统会主动丢掉新连接包，直到连接小于此设置值才会恢复。       
@@ -382,7 +385,7 @@ net.netfilter.nf_conntrack_tcp_timeout_established=3600
 ```
 
 * 对于上述解决方案**无法修改nf_conntrack_buckets的参数**，因为此为只读文件，通过上述`nf_conntrack-sysctl.txt`文件可知知，可以通过模块加载的时候设置参数。此时可以采用下面方案进行修改：    
-> 1. 通过系统初始化脚本创建配置文件”/etc/modprobe.d/nf_conntrack.conf”, 内容为“options nf_conntrack hashsize=262144”，通过nf_conntrack模块挂接参数”hashsize”设置“net.nf_conntrack_max=2097152”（nf_conntrack_max=hashsize*8），保证后续新初始化服务器配置正确。  
+> 1. 通过系统初始化脚本创建配置文件”/etc/modprobe.d/nf_conntrack.conf”, 内容为“options nf_conntrack hashsize=262144”，通过nf_conntrack模块挂接参数”hashsize”自动设置“net.nf_conntrack_max=2097152”（nf_conntrack_max=hashsize*8），保证后续新初始化服务器配置正确。  
 >   
 > 2. 通过自动化部署工具全网推送配置文件”/etc/modprobe.d/nf_conntrack.conf”, 内容为“options nf_conntrack hashsize=262144”，保证nf_conntrack模块在首次装载或重新装载时“net.nf_conntrack_max”内核参数设置为我们预期的“2097152”。 
 >    
