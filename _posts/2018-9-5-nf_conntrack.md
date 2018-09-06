@@ -339,7 +339,12 @@ Nov  3 23:30:27 digoal_host kernel: : [63500384.060399] nf_conntrack: table full
   
 nf_conntrack table full的问题，会导致丢包，影响网络质量，严重时甚至导致网络不可用。
 
-解决方法举例：
+`nf_conntrack_max`决定连接跟踪表的大小,当nf_conntrack模块被装置且服务器上连接超过这个设定的值时，系统会主动丢掉新连接包，直到连接小于此设置值才会恢复。       
+`nf_conntrack_buckets`决定存储conntrack条目的哈希表大小，若是单方面修改`nf_conntrack_max`，而不修改`nf_conntrack_buckets`，只是影响查找速度，挂在不了桶上的新跟踪项目，会挂在到桶中的链表上（原理为hash表结构）。               
+`nf_conntrack_tcp_timeout_established`系统默认值为”432000”，代表nf_conntrack的TCP连接记录时间默认是5天，致使nf_conntrack的值减不下来，丢包持续时间长。        
+通过修改这两个值即可，但是**nf_conntrack_buckets时个只读文件**，无法进行修改。    
+
+#### 解决方法举例：
 
 1、排查是否DDoS攻击，如果是，从预防攻击层面解决问题。
 
@@ -353,13 +358,32 @@ nf_conntrack table full的问题，会导致丢包，影响网络质量，严重
 
 4、加大表的上限（需要考虑内存的消耗）
 
-`sysctl -w net.nf_conntrack_max = 10240000`
+#### 修改参数：    
+
+* 或通过sysctl命令进行修改：    
+```
+$ sysctl -w net.netfilter.nf_conntrack_max=1048576
+$ sysctl -w net.netfilter.nf_conntrack_tcp_timeout_established=3600
+$ sysctl -p #使生效
+```   
   
-永久生效
+* 或是直接永久性修改永久生效
 ```
 vi /etc/sysctl.conf  
-net.nf_conntrack_max = 10240000  
+net.netfilter.nf_conntrack_max=1048576
+net.netfilter.nf_conntrack_tcp_timeout_established=3600         
 ```
+
+* 对于上述解决方案**无法修改nf_conntrack_buckets的参数**，因为此为只读文件，通过上述`nf_conntrack-sysctl.txt`文件可知知，可以通过模块加载的时候设置参数。此时可以采用下面方案进行修改：    
+> 1. 通过系统初始化脚本创建配置文件”/etc/modprobe.d/nf_conntrack.conf”, 内容为“options nf_conntrack hashsize=262144”，通过nf_conntrack模块挂接参数”hashsize”设置“net.nf_conntrack_max=2097152”（nf_conntrack_max=hashsize*8），保证后续新初始化服务器配置正确。  
+>   
+> 2. 通过自动化部署工具全网推送配置文件”/etc/modprobe.d/nf_conntrack.conf”, 内容为“options nf_conntrack hashsize=262144”，保证nf_conntrack模块在首次装载或重新装载时“net.nf_conntrack_max”内核参数设置为我们预期的“2097152”。 
+>    
+> 3. 更新系统初始化脚本，设置“net.netfilter.nf_conntrack_tcp_timeout_established=1800”，减少nf_conntrack的TCP连接记录时间。
+> 
+> 4. 如果并不需要nf_conntrack及其相关模块可以在/etc/modprobe.d目录新建文件blacklist.conf ,文件中加入：install nf_conntrack /bin/false 这样做的副作用是无法再使用Iptables NAT相关功能。
+
+
 <br>
 ### 计算公式    
 可以增大 conntrack 的条目(sessions, connection tracking entries) CONNTRACK_MAX 或者增加存储 conntrack 条目哈希表的大小 HASHSIZE    
@@ -373,39 +397,14 @@ CONNTRACK_MAX = HASHSIZE * 8
 这表示每个链接列表里面平均有 8 个 conntrack 条目。其真正的计算公式如下：    
 HASHSIZE = CONNTRACK_MAX / 8 = RAMSIZE (in bytes) / 131072 / (ARCH / 32)    
 比如一个 64 位 48G 的机器可以存储 48*1024^3/131072/2 = 196608 的buckets(连接列表)。对于大于 1G 内存的系统，默认的 HASHSIZE 是 8192。    
- 
-`nf_conntrack_max`决定连接跟踪表的大小,当nf_conntrack模块被装置且服务器上连接超过这个设定的值时，系统会主动丢掉新连接包，直到连接小于此设置值才会恢复。       
-`nf_conntrack_buckets`决定存储conntrack条目的哈希表大小。    
-`nf_conntrack_tcp_timeout_established`系统默认值为”432000”，代表nf_conntrack的TCP连接记录时间默认是5天，致使nf_conntrack的值减不下来，丢包持续时间长。        
-通过修改这两个值即可，但是**nf_conntrack_buckets时个只读文件**，无法进行修改。    
-* 可以通过 echo 直接修改目前系统 CONNTRACK_MAX 以及 HASHSIZE 的值，缩短 timeout 的值：    
-```     
-$ echo 100000 > /proc/sys/net/netfilter/nf_conntrack_max        
-$ echo 50000 > /proc/sys/net/netfilter/nf_conntrack_buckets      
-$ echo 600 > /proc/sys/net/netfilter/nf_conntrack_tcp_timeout_established    
-```
 
-* 或通过sysctl命令进行修改：    
-```
-$ sysctl -w net.netfilter.nf_conntrack_max=1048576
-$ sysctl -w net.netfilter.nf_conntrack_buckets=262144
-$ sysctl -w net.netfilter.nf_conntrack_tcp_timeout_established=3600
-$ sysctl -p #使生效
-```   
-
-* 或是直接永久性修改：        
-```
-echo 'net.netfilter.nf_conntrack_max=1048576' >> /etc/sysctl.conf
-echo 'net.netfilter.nf_conntrack_buckets=262144' >> /etc/sysctl.conf
-echo 'net.netfilter.nf_conntrack_tcp_timeout_established=3600' >> /etc/sysctl.conf
-reboot
-```
 
 
 <br>
 参考链接：    
 [解决 nf_conntrack: table full, dropping packet 的几种思路](http://jaseywang.me/2012/08/16/%E8%A7%A3%E5%86%B3-nf_conntrack-table-full-dropping-packet-%E7%9A%84%E5%87%A0%E7%A7%8D%E6%80%9D%E8%B7%AF/)       
-[Linux服务器丢包故障的解决思路及引申的TCP/IP协议栈理论](https://www.sdnlab.com/17530.html)     
+[Linux服务器丢包故障的解决思路及引申的TCP/IP协议栈理论](https://www.sdnlab.com/17530.html)    
+[net.nf_conntrack_max 设置异常问题](http://blog.kissingwolf.com/2017/09/09/net-nf-conntrack-max-%E8%AE%BE%E7%BD%AE%E5%BC%82%E5%B8%B8%E9%97%AE%E9%A2%98/)         
 
 
 <br> 
