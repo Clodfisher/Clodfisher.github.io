@@ -336,7 +336,6 @@ Nov  3 23:30:27 digoal_host kernel: : [63500384.060399] nf_conntrack: table full
 ```
 <br>
 ### 会话表满的解决办法     
-  
 nf_conntrack table full的问题，会导致丢包，影响网络质量，严重时甚至导致网络不可用。
 
 `nf_conntrack_max`决定连接跟踪表的大小,当nf_conntrack模块被装置且服务器上连接超过这个设定的值时，系统会主动丢掉新连接包，直到连接小于此设置值才会恢复。       
@@ -345,7 +344,6 @@ nf_conntrack table full的问题，会导致丢包，影响网络质量，严重
 通过修改这两个值即可，但是**nf_conntrack_buckets时个只读文件**，无法进行修改。    
 
 #### 解决方法举例：
-
 1、排查是否DDoS攻击，如果是，从预防攻击层面解决问题。    
 
 2、清空会话表。    
@@ -368,7 +366,6 @@ nf_conntrack table full的问题，会导致丢包，影响网络质量，严重
 4. 触发nf_conntrack模块重新装载的操作很多，CentOS6 中“service iptables restart”，CentOS7中“systemctl restart firewalld”都会触发设置重置，致使net.nf_conntrack_max 重设为65536。     
   
 #### 修改参数：    
-
 * 或通过sysctl命令进行修改：    
 ```
 $ sysctl -w net.netfilter.nf_conntrack_max=1048576
