@@ -143,7 +143,7 @@ a) 基本匹配包括：
 | 匹配参数        | 说明     |    
 | ------------- |--------------:|    
 | -p &#124; --protocol[!]\[\<protocol> |指定规则协议，如 tcp, udp,icmp 等，可以使用 all 来指定所有协议 |    
-| -s |指定数据包的源地址参数，可以使 IP 地址、网络地址、主机名 |   
+| -s &#124; --source &#124; --src[!]\<address>[\<\/mask> |指定数据包的源地址参数，可以使 IP 地址、网络地址、主机名 |   
 | -d &#124; --destination &#124; --dst[!]\<address>[\<\/mask> |指定目的地址 |    
 | -i &#124; --in-interface[!]\[\<interface>] |输入接口 |   
 | -o &#124; --in-interface[!]\[\<interface>] |输出接口 |    
