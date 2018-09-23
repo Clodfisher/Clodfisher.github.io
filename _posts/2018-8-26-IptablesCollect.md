@@ -36,6 +36,24 @@ IPTables是用户空间的工具，它提供了4张表，分别是：
  
 优先级顺序是：raw ---> mangle --->  nat ---> filter。也就是说在某一个链上有多张表，数据包都会依次按照hook点的方向进行传输，每个hook点上Netfilter又按照优先级挂了很多hook函数（即表），就是按照这个顺序依次处理。无论那一个Filter表其匹配原则都是“First Match”，即优先执行，第一条规则逐一向下匹配，如果封包进来遇到第一条规则允许通过，那么这个封包就通过，而不管下面的rule2、rule3的规则是什么都不重要；相反如果第一条规则说要丢弃，即便是rule2规则允许通过也不起任何作用，这就是“first match”原则。       
 ![](/images/posts/2018-8-26-IptablesCollect/IptablesCollect5.jpg)       
+上图说明了四种表，作用的内置链，其中主要的表有三个，表raw有着特殊的用途，三个主要的表作用的内置链分别如下：    
+
+* filter - filter表示默认表。它包含了实际防火墙的过滤规则。其内建的规则链包括：        
+> * INPUT;    
+> * OUTPUT;    
+> * FORWARD。    
+
+* nat - nat表包含了源地址和目的地址转换以及端口转换的规则。这些规则在功能上与防火墙filter规则不同。内建的规则包括：    
+> * PREROUTING - DNAT/REDIRECT;    
+> * OUTPUT - DNAT/REDIRECT;    
+> * POSTROUTING - SNAT/MASQUERADE。    
+
+* mangle - mangle表包含了设置特殊数据包路由标志的规则。这些规则接下来将在filter表中进行检查。其内建的规则链包括：    
+> * PREROUTING - 被路由的数据包；    
+> * INPUT - 到达防火墙并通过PREROUTING规则链的数据包；    
+> * FORWARD - 修改通过防火墙路由的数据包；    
+> * POSTROUTING - 在数据包通过OUTPUT规则链之后，但在离开防火墙之前修改数据包；    
+> * OUTPUT - 本地生成的数据包。    
 
 <br>   
 ###  Iptables基本操作    
