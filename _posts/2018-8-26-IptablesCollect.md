@@ -35,7 +35,7 @@ IPTables是用户空间的工具，它提供了4张表，分别是：
 ![](/images/posts/2018-8-26-IptablesCollect/IptablesCollect3.jpg)       
  
 优先级顺序是：raw ---> mangle --->  nat ---> filter。也就是说在某一个链上有多张表，数据包都会依次按照hook点的方向进行传输，每个hook点上Netfilter又按照优先级挂了很多hook函数（即表），就是按照这个顺序依次处理。无论那一个Filter表其匹配原则都是“First Match”，即优先执行，第一条规则逐一向下匹配，如果封包进来遇到第一条规则允许通过，那么这个封包就通过，而不管下面的rule2、rule3的规则是什么都不重要；相反如果第一条规则说要丢弃，即便是rule2规则允许通过也不起任何作用，这就是“first match”原则。       
-![](/images/posts/2018-8-26-IptablesCollect/IptablesCollect5.jpg)       
+![](/images/posts/2018-8-26-IptablesCollect/IptablesCollect5.png)       
 
 <br>   
 ###  Iptables基本操作    
