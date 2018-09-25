@@ -35,7 +35,29 @@ IPTables是用户空间的工具，它提供了4张表，分别是：
 ![](/images/posts/2018-8-26-IptablesCollect/IptablesCollect3.jpg)       
  
 优先级顺序是：raw ---> mangle --->  nat ---> filter。也就是说在某一个链上有多张表，数据包都会依次按照hook点的方向进行传输，每个hook点上Netfilter又按照优先级挂了很多hook函数（即表），就是按照这个顺序依次处理。无论那一个Filter表其匹配原则都是“First Match”，即优先执行，第一条规则逐一向下匹配，如果封包进来遇到第一条规则允许通过，那么这个封包就通过，而不管下面的rule2、rule3的规则是什么都不重要；相反如果第一条规则说要丢弃，即便是rule2规则允许通过也不起任何作用，这就是“first match”原则。       
+<<<<<<< HEAD
 ![](/images/posts/2018-8-26-IptablesCollect/IptablesCollect5.png)       
+=======
+![](/images/posts/2018-8-26-IptablesCollect/IptablesCollect5.jpg)       
+上图说明了四种表，作用的内置链，其中主要的表有三个，表raw有着特殊的用途，三个主要的表作用的内置链分别如下：    
+
+* filter - filter表示默认表。它包含了实际防火墙的过滤规则。其内建的规则链包括：        
+> * INPUT;    
+> * OUTPUT;    
+> * FORWARD。    
+
+* nat - nat表包含了源地址和目的地址转换以及端口转换的规则。这些规则在功能上与防火墙filter规则不同。内建的规则包括：    
+> * PREROUTING - DNAT/REDIRECT;    
+> * OUTPUT - DNAT/REDIRECT;    
+> * POSTROUTING - SNAT/MASQUERADE。    
+
+* mangle - mangle表包含了设置特殊数据包路由标志的规则。这些规则接下来将在filter表中进行检查。其内建的规则链包括：    
+> * PREROUTING - 被路由的数据包；    
+> * INPUT - 到达防火墙并通过PREROUTING规则链的数据包；    
+> * FORWARD - 修改通过防火墙路由的数据包；    
+> * POSTROUTING - 在数据包通过OUTPUT规则链之后，但在离开防火墙之前修改数据包；    
+> * OUTPUT - 本地生成的数据包。    
+>>>>>>> 328105c3d7d1e1dfbe3444b84817030b59a5504d
 
 <br>   
 ###  Iptables基本操作    
@@ -140,13 +162,14 @@ command部分是iptables命令最重要的部分。它告诉iptables命令要做
 条件匹配分为基本匹配和扩展匹配，拓展匹配又分为隐式扩展和显示扩展。    
 a) 基本匹配包括：    
 
-| 匹配参数        | 说明     |
-| ------------- |--------------:|
-| -p |指定规则协议，如 tcp, udp,icmp 等，可以使用 all 来指定所有协议 |
-| -s |指定数据包的源地址参数，可以使 IP 地址、网络地址、主机名 |
-| -d |指定目的地址 |
-| -i |输入接口 |
-| -o |输出接口 |
+| 匹配参数        | 说明     |    
+| ------------- |--------------:|    
+| -p &#124; --protocol[!]\[\<protocol> |指定规则协议，如 tcp, udp,icmp 等，可以使用 all 来指定所有协议 |    
+| -s &#124; --source &#124; --src[!]\<address>[\<\/mask> |指定数据包的源地址参数，可以使 IP 地址、网络地址、主机名 |   
+| -d &#124; --destination &#124; --dst[!]\<address>[\<\/mask> |指定目的地址 |    
+| -i &#124; --in-interface[!]\[\<interface>] |输入接口 |   
+| -o &#124; --in-interface[!]\[\<interface>] |输出接口 |    
+| -j &#124; --jump\<target> |如果数据包匹配规则，则设置此数据包的处置策略。默认的目标包括内建的策略、扩展策略，或用户自定义规则链 |
 
 b) 隐式扩展包括：    
 ![](/images/posts/2018-8-26-IptablesCollect/IptablesCollect6.jpg)       
