@@ -205,19 +205,49 @@ c) 常用显式扩展：
 ##### 在几号规则前插入一条所有都能通过规则    
 > `iptables -I FORWARD 1 -j ACCEPT`    
 
+<br>
+### iptables显式扩展
+#### 查看iptables支持哪些显示扩展    
+在使用该扩展之前，必须使用-m或–match选项指定模块。有很多种显式匹配扩展模块可用，可以用如下命令查看可用的扩展模块    
+`[root@localhost ~]# rpm -ql iptables | grep "[[:lower:]]\+\.so$"1`    
+扩展模块的使用方法可以man iptables（CentOS 6）或man iptables-extensions（CentOS 7）查找对应内容，下面介绍几个常用显式扩展模块      
+官网链接：    
+[iptables-extensions.man.html](http://ipset.netfilter.org/iptables-extensions.man.html)    
+
+#### 用到的显式扩展模块    
+##### connlimit扩展     
+允许您限制每个客户端IP地址（或客户端地址块）与服务器的并行连接数。    
+```
+--connlimit-upto n
+    如果现有连接数低于或等于n，则匹配。
+--connlimit-above n
+    如果现有连接数高于n，则匹配。
+--connlimit-mask prefix_length
+    使用前缀长度对主机进行分组。对于IPv4，它必须是介于（包括）0和32之间的数字。对于IPv6，
+    介于0和128之间。如果未指定，则使用适用协议的最大前缀长度。
+--connlimit-saddr
+    将限制应用于源组。如果未指定--connlimit-daddr，则这是默认值。
+--connlimit-daddr
+    将限制应用于目标组。
+
+Examples:
+# 每个客户端主机允许2个telnet连接:
+iptables -A INPUT -p tcp --syn --dport 23 -m connlimit --connlimit-above 2 -j REJECT
+#你也可以匹配其他方式：
+iptables -A INPUT -p tcp --syn --dport 23 -m connlimit --connlimit-upto 2 -j ACCEPT
+# 将并行HTTP请求的数量限制为每个C类源网络16个（24位网络掩码）:
+iptables -p tcp --syn --dport 80 -m connlimit --connlimit-above 16 --connlimit-mask 24 -j REJECT
+# 将链接本地网络的并行HTTP请求数限制为16:
+(ipv6) ip6tables -p tcp --syn --dport 80 -s fe80::/64 -m connlimit --connlimit-above 16 --connlimit-mask 64 -j REJECT
+# 限制与特定主机的连接数:
+ip6tables -p tcp --syn --dport 49152:65535 -d 2001:db8::1 -m connlimit --connlimit-above 100 -j REJECT
+ 
+```        
 
 <br>
 ### iptables各模块     
 #### nf_conntrack模块         
 [传送门](https://clodfisher.github.io/2018/09/nf_conntrack/)    
-
-
-  
-
-    
-   
-
-
 
 <br>
 参考链接：    
@@ -237,7 +267,11 @@ c) 常用显式扩展：
 [CentOS7启用iptables防火墙](https://www.jianshu.com/p/01edf3c67a1b)     
 [CentOS7安装iptables防火墙](https://www.cnblogs.com/kreo/p/4368811.html)       
 [netfilter内核模块知识 - 解决nf_conntrack: table full, dropping packet](https://github.com/digoal/blog/blob/master/201612/20161229_04.md)  
-
+[iptables-extensions.man.html](http://ipset.netfilter.org/iptables-extensions.man.html)     
+[iptables基础](https://blog.csdn.net/u014721096/article/details/78594645)        
+[iptables之显式扩展](https://blog.csdn.net/u014721096/article/details/78605695)    
+[Linux里的防火墙（下）：iptables的扩展模块——l7-filter的安装与功能实现](https://blog.csdn.net/deansrk/article/details/6706461)    
+[Netfilter-wikipedia](https://en.wikipedia.org/wiki/Netfilter)    
 
 
 
