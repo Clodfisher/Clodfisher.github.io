@@ -179,11 +179,36 @@ c) 常用显式扩展：
 #### target     
 数据包控制方式包括四种为：    
 > ACCEPT：允许数据包通过     
-> DROP：直接丢弃数据包，不给出任何回应信息     
-> REJECT：拒绝数据包通过，必须时会给数据发送端一个响应信息     
-> LOG：在/var/log/messages 文件中记录日志信息，然后将数据包传递给下一条规则     
+> DROP：直接丢弃数据包，不给出任何回应信息       
+> REJECT: 拒绝，使用--reject-with选项可以提示信息，有以下可用值
+>  * icmp-net-unreachable
+>  * icmp-host-unreachable
+>  * icmp-port-unreachable
+>  * icmp-proto-unreachable
+>  * icmp-net-prohibited
+>  * icmp-host-prohibited  
+>  * icmp-admin-pro-hibited
+>  * 未做设置设置的话默认是icmp-port-unreachable     
+
+> LOG：在/var/log/messages 文件中记录日志信息，然后将数据包传递给下一条规则   
+> * --log-level   记录日志级别，有debug，info，notice，warning，error，      crit，alert，emerg 
+> * --log-prefix   给记录日志加上标签，最多29个字符  
+
+
 > QUEUE：防火墙将数据包移交到用户空间     
-> RETURN：防火墙停止执行当前链中的后续Rules，并返回到调用链(the calling chain)     
+> RETURN：防火墙停止执行当前链中的后续Rules，并返回到调用链(the calling chain)    
+> REDIRECT：端口重定向
+>  * --to-ports
+ 
+> MARK：做防火墙标记
+> DNAT：目标地址转换
+> * --to-destination  
+
+> SNAT：源地址转换
+> * --to-source
+
+> MASQUERADE：地址伪装
+> 自定义链：由自定义链上的规则进行匹配检查
 
 <br>
 ### Iptables 常见命令    
