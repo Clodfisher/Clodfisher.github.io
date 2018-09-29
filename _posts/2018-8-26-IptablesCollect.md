@@ -214,6 +214,11 @@ c) 常用显式扩展：
 官网链接：    
 [iptables-extensions.man.html](http://ipset.netfilter.org/iptables-extensions.man.html)    
 
+#### 查看某个扩展模块命令输入    
+```
+iptables -m connlimit --help
+```
+
 #### 用到的显式扩展模块    
 ##### connlimit扩展     
 允许您限制每个客户端IP地址（或客户端地址块）与服务器的并行连接数。    
