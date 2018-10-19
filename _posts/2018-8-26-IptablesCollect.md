@@ -58,7 +58,26 @@ IPTables是用户空间的工具，它提供了4张表，分别是：
 
 
 <br>   
-###  Iptables基本操作    
+###  Iptables基本操作       
+
+#### 配置防火墙        
+```
+#先检查是否安装了iptables
+service iptables status
+#安装iptables
+yum install -y iptables
+#升级iptables
+yum update iptables
+#安装iptables-services
+yum install iptables-services
+
+#禁用/停止自带的firewalld服务
+#停止firewalld服务
+systemctl stop firewalld
+#禁用firewalld服务
+systemctl mask firewalld
+```
+ 
 #### service命令    
 
 启动 `iptables` ： `service iptables start`    
