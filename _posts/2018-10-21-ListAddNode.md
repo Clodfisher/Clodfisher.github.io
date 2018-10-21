@@ -11,7 +11,9 @@ tags: 算法与数据结构
 
 <br>
 ### 链表数据结构与函数    
+
 链表的数据结构：    
+
 ```
 struct node
 {
@@ -44,9 +46,10 @@ int AddNewNode(struct node **list, struct node *n);
 **第二个**是插入位置的上一个节点next这块内存中，存放的地址是新节点地址。    
 所以只需要根据不同的条件移动list，使`*list`这块内存中，存放的是新节点的地址。    
 
-实现代码如下：    
+实现代码如下：
+    
 ```
-int AddNewNode(struct node **list, struct node *n);\
+int AddNewNode(struct node **list, struct node *n);
 {
     while(*list)
     {
