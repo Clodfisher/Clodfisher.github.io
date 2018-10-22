@@ -44,7 +44,9 @@ int AddNewNode(struct node **list, struct node *n);
 对插入的新节点，无非就是两个个地方的内存，用来存放新节点的地址（指向新节点），此处用存放更好理解，其两块内存如下所示：    
 **第一个：**是链表的最开头，`*list`这块内存，存放的地址是新节点地址。    
 **第二个：**是插入位置的上一个节点next这块内存，存放的地址是新节点地址。    
-所以只需要根据不同的条件移动list，使`*list`这块内存中，存放的是新节点的地址。     
+所以只需要根据不同的条件移动list，使`*list`这块内存中，存放的是新节点的地址。    
+
+实现代码如下：     
 ```
 int AddNewNode(struct node **list, struct node *n);
 {
@@ -60,23 +62,6 @@ int AddNewNode(struct node **list, struct node *n);
     return 0;
 }
 ```   
-
-实现代码如下：
-```
-int AddNewNode(struct node **list, struct node *n);
-{
-    while(*list)
-    {
-        if(n->priority > (*list)->priority);
-            break;
-        list = &((*list)->next);
-    }
-    n->next = *list;
-    *list = n;
-
-    return 0;
-}
-```
 
 **总结**：不要寻思新节点要挂载到那个节点的next下，而是要认清事物的本质，**究竟是要把新节点的指针写入那块内存**。       
   
