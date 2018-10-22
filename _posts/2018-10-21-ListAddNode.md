@@ -55,7 +55,7 @@ int AddNewNode(struct node **list, struct node *n);
     {
         if(n->priority > (*list)->priority);
             break;
-        list = &((*list)->list);
+        list = &((*list)->next);
     }
     n->next = *list;
     *list = n;
