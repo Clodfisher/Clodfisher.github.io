@@ -27,7 +27,8 @@ title: 关于我
 **QQ**：643093596    
 **outlook**：hunter_yuan@outlook.com    
 **gethib**：[传送门](https://github.com/clodfisher)    
-**博客**:[CSDN](http://blog.csdn.net/tao546377318)     
+**博客**:[CSDN](http://blog.csdn.net/tao546377318)   
+**我的读书单**:[读书单](https://book.douban.com/people/186384897/)      
 **segmentfault**:[segmentfault](https://segmentfault.com/u/hunteryuan)         
 
 **友情链接**：    
