@@ -28,8 +28,11 @@ title: 关于我
 **outlook**：hunter_yuan@outlook.com    
 **gethib**：[传送门](https://github.com/clodfisher)    
 **博客**:[CSDN](http://blog.csdn.net/tao546377318)   
-**我的读书单**:[读书单](https://book.douban.com/people/186384897/)      
-**segmentfault**:[segmentfault](https://segmentfault.com/u/hunteryuan)         
+**我的读书单**:[读书单](https://book.douban.com/people/186384897/)          
+**segmentfault**:[segmentfault](https://segmentfault.com/u/hunteryuan)    
+
+**座右铭**：    
+腹有诗书气自华             
 
 **友情链接**：    
 [王哈哈](http://am4zing.me/)          
