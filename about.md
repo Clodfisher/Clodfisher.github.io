@@ -36,5 +36,5 @@ title: 关于我
 
 **友情链接**：    
 [王哈哈](http://am4zing.me/)          
-[小白](http://haoxiaohui.xyz/)     
+[小白](http://jusanliusha.xyz/)       
 
