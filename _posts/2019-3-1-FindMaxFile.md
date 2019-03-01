@@ -19,7 +19,7 @@ tags: 实战运维
 ![](/images/posts/2019-3-1-FindMaxFile/FinMaxFile1.jpg)         
 
 3. 进入第2步中找到的目录，再接着查找定位。        
-![](/images/posts/2019-3-1-FindMaxFile/FinMaxFile1.jpg)         
+![](/images/posts/2019-3-1-FindMaxFile/FinMaxFile2.jpg)         
 
 ### 总结    
 对于目录包含内容的大小要用`du`命令，而不是`ls -alh`,`ls`只能够查看文件大小（文本文件或目录文件）。    
