@@ -10,11 +10,13 @@ tags: 实战运维
 【现场网络拓扑图如下所示：】    
 ![](/images/posts/2019-3-7-EbtablesArp/EbtablesArp0.jpg)                
 
+<br>
 ### 问题分析    
 由于客户端Ip、设备eth0Ip和服务器IP都在同一个网段，但此时网卡eth0的Ip和服务器Ip出现冲突。在满足现场需求，需要将br0中客户端去往服务器的数据包拦截掉，此时采用ebtables，若采用iptables怕三层的forward连中配置的规则，影响到二层中forward链的数据。       
 【iptables和ebtables数据流图如下所示：】     
 ![](/images/posts/2019-3-7-EbtablesArp/EbtablesArp1.jpg)             
 
+<br>
 ### 解决方法    
 1. 通过ebtables下发如下命令：    
 `ebtables -I FORWARD -p IPv4 --ip-dst 192.168.6.101 -j DROP`    
@@ -22,7 +24,8 @@ tags: 实战运维
 `ebtables -I FORWARD -p arp --arp-ip-dst 192.168.6.101 -j DROP`。     
 【不通问题，抓包图：】    
 ![](/images/posts/2019-3-7-EbtablesArp/EbtablesArp2.jpg)             
-       
+
+<br>       
 ### 总结        
 1. 对于网络不通的情况，要从二层arp开始分析，不能单单局限于ip层，因为虽然第一次下发的规则，将ip层丢弃了，但是二层arp放过了，导致客户端获取到的mac还是服务器的mac。    
 
