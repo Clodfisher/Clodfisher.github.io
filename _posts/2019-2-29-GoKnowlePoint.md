@@ -424,7 +424,29 @@ tags: Go
 **条件变量**     
 > * 条件变量时基于互斥锁的，它必须有互斥锁的支持才能发挥作用。    
 > * 条件变量并不是被用来保护临界区和共享资源的，他是用来协调想要访问共享资源的那些线程的。当共享资源的状态发生变化是，它可以被用来通知被互斥锁阻塞的线程。    
-> * 条件变量提供的方法有三个：等待通知（wait）、单发通知（signal）和广播通知（broadcast）。        
+> * 条件变量提供的方法有三个：等待通知（wait）、单发通知（signal）和广播通知（broadcast）。     
+
+**条件变量Wait方法所做事情**    
+> 1. 把调用它的goroutine(也就是当前的goroutine)加入到当前条件变量的通知队列中。    
+> 2. 解锁当前的条件变量基于的那个互斥锁。    
+> 3. 让当前的goroutine处于等待状态，等到通知到来再决定是否唤醒它。此时，这个goroutine就会阻塞在调用这个Wait方法的按行代码上。    
+> 4. 如果通知到来并且决定唤醒这个goroutine，那么就在唤醒它之后重新锁定当前条件变量基于的互斥锁。自此之后，当前的goroutine就会继续执行后面的代码。    
+> * 核心代码如下：    
+```
+func (c *Cond) Wait() {    
+	c.checker.check()    
+	t := runtime_notifyListAdd(&c.notify)    
+	c.L.Unlock()    
+	runtime_notifyListWait(&c.notify, t)    
+	c.L.Lock()    
+}
+```    
+
+**Signal和Broadcast方法**    
+> * 条件变量Signal方法和Broadcast方法都是被用来发送通知的，前者的通知只会唤醒一个因此而等待的goroutine，而后者的通知却会唤醒所有为此等待的goroutine。   
+> * 条件变量的Wait方法总会把当前的goroutine添加到通知队列的队尾，而它的Signal方法总会从通知队列的队首开始，查找可被唤醒goroutine。所以，因Signal方法的通知，而被唤醒的goroutine一般都是最早等待的那一个。    
+> * 与Wait方法不同，条件变量Signal和Broadcast方法并不需要在互斥锁的保护下执行，最好在解锁条件变量基于的那个互斥锁之后，再去调用它的两个方法。这更有利于程序的运行效率。   
+> * 通知的及时性，如果发送通知的时候没有goroutine为此等待，那么该通知就会被直接丢弃，在这之后才开始等待的goroutine只可能被后面的通知唤醒。         
 
 <br>
 持续更新......
