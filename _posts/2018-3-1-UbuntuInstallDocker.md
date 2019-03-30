@@ -51,6 +51,9 @@ sudo add-apt-repository \
    $(lsb_release -cs) \
    stable"
 ```
+
+注：其中的lsb_release -cs为获取当前操作系统的代号，一般情况下，Ubuntu16.04LTS代号为xenial，Ubuntu18.04LTS代号为bionic。    
+
 <br>
 ### 安装Docker CE    
 
