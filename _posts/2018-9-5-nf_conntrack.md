@@ -37,7 +37,7 @@ iptables中的状态检测功能是由state选项来实现iptable的。对这个
 
 ```
 查看nf_conntrack表当前连接数    
-cat /proc/sys/net/netfilter/nf_conntrack    
+cat /proc/sys/net/netfilter/nf_conntrack_count       
 
 查看nf_conntrack表最大连接数    
 cat /proc/sys/net/netfilter/nf_conntrack_max    
@@ -276,7 +276,8 @@ Be conservative in what you do, be liberal in what you accept from others.If it'
 值类型：BOOLEAN      
 0 - disabled     
 not 0 - enabled (default)      
-如果它设置为零，我们将禁用拾取已建立的连接。     
+如果它设置为零，我们将禁用拾取已建立的连接。    
+它的意思是，是否仅仅允许为经过TCP三次握手的流创建nf_conntrack表项还是说为任意收到的TCP数据包(有可能是一个构造出来的攻击包)查询未果后均创建新的nf_conntrack表项。          
 
 * nf_conntrack_tcp_max_retrans    
 值类型：INTEGER      
