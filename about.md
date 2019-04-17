@@ -37,4 +37,5 @@ title: 关于我
 **友情链接**：    
 [王哈哈](http://am4zing.me/)          
 [小白](http://jusanliusha.xyz/)       
+[胡子哥](https://me.csdn.net/weixin_39713646)    
 
