@@ -589,8 +589,38 @@ p >= r 不用再继续分解
 > * 中序遍历是指，对于树中的任意节点来说，先打印它的左子树，然后再打印它本身，最后打印它的右子树。    
 > * 后续遍历是指，对于树中的任意节点来说，先打印它的左子树，然后再打印它的右子树，最后打印这个节点本身。    
 
-> 实际上，二叉树的前、中、后序遍历就是一个递归的过程。     
+> 实际上，二叉树的前、中、后序遍历就是一个递归的过程。      
+> * 前序遍历的递推公式：    
+>   `preOrder(r) = print r -> preOrder(r->left) -> PreOrder(r->right)`       
+> * 中序遍历的递推公式：    
+>   `inOrder(r) = inOrder(r->left) -> print r -> inOrder(r->right)`    
+> * 后序遍历的递推公式：     
+>   `postOrder(r) = postOrder(r->legt) -> postOrder(r->right) -> print r`    
 
+> 三种遍历的伪代码：    
+> ```
+> void preOrder(Node* root){
+>     if(root == null) return;
+>     print root; //打印root节点
+>     preOrder(root->left);
+>     preOrder(root->right);
+> }
+> 
+> void preOrder(Node* root){
+>     if(root == null) return;
+>     preOrder(root->left);
+>     print root; //打印root节点
+>     preOrder(root->right);
+> }
+> 
+> void preOrder(Node* root){
+>     if(root == null) return;
+>     preOrder(root->left);
+>     preOrder(root->right);
+>     print root; //打印root节点
+> }
+> ```     
+> 时间复杂度：每个节点最多会被访问两次，所以遍历操作的时间复杂度，跟节点的个数n成正比，所以二叉树遍历的实际复杂度是O(n)。        
 
 
     
