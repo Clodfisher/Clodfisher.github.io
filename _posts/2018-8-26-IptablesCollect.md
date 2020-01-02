@@ -56,6 +56,21 @@ IPTables是用户空间的工具，它提供了4张表，分别是：
 > * POSTROUTING - 在数据包通过OUTPUT规则链之后，但在离开防火墙之前修改数据包；    
 > * OUTPUT - 本地生成的数据包。    
 
+换一种角度，从链的HOOK点来看表,不包括raw表:    
+**NF_IP_PRE_ROUTING** 在这个HOOK上主要是对数据报作报头检测处理，以捕获异常情况。涉及功能（优先级顺序）：    
+> Conntrack(-200)、mangle(-150)、DNAT(-100)    
+
+**NF_IP_LOCAL_IN** 在这个HOOK上主要是对数据报作报头检测处理，以捕获异常情况。涉及功能（优先级顺序）：    
+> mangle(-150)、filter(0)、SNAT(100)、Conntrack(INT_MAX-1)    
+
+**NF_IP_FORWARD** 在这个HOOK上主要是对数据报作报头检测处理，以捕获异常情况。涉及功能（优先级顺序）：    
+> mangle(-150)、filter(0)    
+
+**NF_IP_LOCAL_OUT** 在这个HOOK上主要是对数据报作报头检测处理，以捕获异常情况。涉及功能（优先级顺序）：    
+> Conntrack(-200)、mangle(-150)、DNAT(-100)、filter(0)     
+
+**NF_IP_POST_ROUTING** 在这个HOOK上主要是对数据报作报头检测处理，以捕获异常情况。涉及功能（优先级顺序）：    
+> mangle(-150)、SNAT(100)、Conntrack(INT_MAX)     
 
 <br>   
 ###  Iptables基本操作       
